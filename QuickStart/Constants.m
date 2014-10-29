@@ -8,6 +8,6 @@
 
 #import "Constants.h"
 
-NSString * const kUserID = @"maju6406";
-NSString * const kParticipant = @"maju6406";
-NSString * const kAppID =@"4ecc1f16-0c5e-11e4-ac3e-276b00000a10";
+NSString * const kUserID = @"ENTER_USER_ID_HERE";
+NSString * const kParticipant = @"ENTER_ANOTHER_USER_ID_HERE";
+NSString * const kAppID =@"ENTER LAYER APP ID HERE";

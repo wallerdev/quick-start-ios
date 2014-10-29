@@ -23,14 +23,22 @@ extern NSString *const LYRClientDidDeauthenticateNotification;
 extern NSString *const LYRClientWillBeginSynchronizationNotification;
 extern NSString *const LYRClientDidFinishSynchronizationNotification;
 
+/**
+ @abstract Content deletion modes
+ */
+typedef NS_ENUM(NSUInteger, LYRDeletionMode) {
+    LYRDeletionModeLocal            = 0,    /* Content is deleted from the current device only. */
+    LYRDeletionModeAllParticipants  = 2     /* Content is deleted from all devices of all participants. */
+};
+
 ///---------------------------
 /// @name Change Notifications
 ///---------------------------
 
 /**
- @abstract Posted when the objects for a client have changed due to synchronization activities.
+ @abstract Posted when the objects associated with a client have changed due to local mutation or synchronization activities.
  @discussion The Layer client provides a flexible notification system for informing applications when changes have
- occured on domain objects in response to synchronization activities. The system is designed to be general
+ occured on domain objects in response to local mutation or synchronization activities. The system is designed to be general
  purpose and models changes as the creation, update, or deletion of an object. Changes are modeled as simple
  dictionaries with a fixed key space that is defined below.
  @see LYRObjectChangeConstants.h
@@ -46,6 +54,37 @@ extern NSString *const LYRClientObjectsDidChangeNotification;
  @see LYRObjectChangeConstants.h
  */
 extern NSString *const LYRClientObjectChangesUserInfoKey;
+
+/**
+ @abstract Posted when the client has scheduled an attempt to connect to Layer.
+ */
+extern NSString *const LYRClientWillAttemptToConnectNotification;
+
+/**
+ @abstract Posted when the client has successfully connected to Layer.
+ */
+extern NSString *const LYRClientDidConnectNotification;
+
+/**
+ @abstract Posted when the client has lost an established connection to Layer.
+ */
+extern NSString *const LYRClientDidLoseConnectionNotification;
+
+/**
+ @abstract Posted when the client has lost the connection to Layer.
+ */
+extern NSString *const LYRClientDidDisconnectNotification;
+
+/**
+ @abstract The key into the `userInfo` of the error object passed by the delegate method `layerClient:didFailOperationWithError:` describing
+ which public API method encountered the failure.
+ @see layerClient:didFailOperationWithError:
+ */
+extern NSString *const LYRClientOperationErrorUserInfoKey;
+
+///----------------------
+/// @name Client Delegate
+///----------------------
 
 /**
  @abstract The `LYRClientDelegate` protocol provides a method for notifying the adopting delegate about information changes.
@@ -67,6 +106,35 @@ extern NSString *const LYRClientObjectChangesUserInfoKey;
 - (void)layerClient:(LYRClient *)client didReceiveAuthenticationChallengeWithNonce:(NSString *)nonce;
 
 @optional
+
+/**
+ @abstract Informs the delegate that the client is making an attempt to connect to Layer.
+ @param client The client attempting the connection.
+ @param attemptNumber The current attempt (of the attempt limit) that is being made.
+ @param delayInterval The delay, if any, before the attempt will actually be made.
+ @param attemptLimit The total number of attempts that will be made before the client gives up.
+ */
+- (void)layerClient:(LYRClient *)client willAttemptToConnect:(NSUInteger)attemptNumber afterDelay:(NSTimeInterval)delayInterval maximumNumberOfAttempts:(NSUInteger)attemptLimit;
+
+/**
+ @abstract Informs the delegate that the client has successfully connected to Layer.
+ @param client The client that made the connection.
+ */
+- (void)layerClientDidConnect:(LYRClient *)client;
+
+/**
+ @abstract Informs the delegate that the client has lost an established connection with Layer due to an error.
+ @param client The client that lost the connection.
+ @param error The error that occurred.
+ */
+- (void)layerClient:(LYRClient *)client didLoseConnectionWithError:(NSError *)error;
+
+/**
+ @abstract Informs the delegate that the client has disconnected from Layer.
+ @param client The client that has disconnected.
+ */
+- (void)layerClientDidDisconnect:(LYRClient *)client;
+
 /**
  @abstract Tells the delegate that a client has successfully authenticated with Layer.
  @param client The client that has authenticated successfully.
@@ -87,14 +155,29 @@ extern NSString *const LYRClientObjectChangesUserInfoKey;
  @param client The client that received the changes.
  @param changes An array of `NSDictionary` objects, each one describing a change.
  */
-- (void)layerClient:(LYRClient *)client didFinishSynchronizationWithChanges:(NSArray *)changes;
+- (void)layerClient:(LYRClient *)client didFinishSynchronizationWithChanges:(NSArray *)changes DEPRECATED_ATTRIBUTE;
 
 /**
  @abstract Tells the delegate the client encountered an error during synchronization.
  @param client The client that failed synchronization.
  @param error An error describing the nature of the sync failure.
  */
-- (void)layerClient:(LYRClient *)client didFailSynchronizationWithError:(NSError *)error;
+- (void)layerClient:(LYRClient *)client didFailSynchronizationWithError:(NSError *)error DEPRECATED_ATTRIBUTE;
+
+/**
+ @abstract Tells the delegate that objects associated with the client have changed due to local mutation or synchronization activities.
+ @param client The client that received the changes.
+ @param changes An array of `NSDictionary` objects, each one describing a change.
+ @see LYRObjectChangeConstants.h
+ */
+- (void)layerClient:(LYRClient *)client objectsDidChange:(NSArray *)changes;
+
+/**
+ @abstract Tells the delegate that an operation encountered an error during a local mutation or synchronization activity.
+ @param client The client that failed the operation.
+ @param error An error describing the nature of the operation failure.
+ */
+- (void)layerClient:(LYRClient *)client didFailOperationWithError:(NSError *)error;
 
 @end
 
@@ -213,9 +296,9 @@ extern NSString *const LYRClientObjectChangesUserInfoKey;
 /**
  @abstract Inspects an incoming push notification and synchronizes the client if it was sent by Layer.
  @param userInfo The user info dictionary received from the UIApplicaton delegate method application:didReceiveRemoteNotification:fetchCompletionHandler:'s `userInfo` parameter.
- @param completion The block that will be called once Layer has successfully downloaded new data associated with the `userInfo` dictionary passed in. It is your responsibility to call the UIApplication delegate method's fetch completion handler with the given `fetchResult`.
- @return A Boolean value that determines whether the push was handled. Will be `NO` if this was not a push notification meant for Layer.
- @note The receiver must be authenticated else a warning will be logged and `NO` will be returned.
+ @param completion The block that will be called once Layer has successfully downloaded new data associated with the `userInfo` dictionary passed in. It is your responsibility to call the UIApplication delegate method's fetch completion handler with the given `fetchResult`. Note that this block is only called if the method returns `YES`.
+ @return A Boolean value that determines whether the push was handled. Will be `NO` if this was not a push notification meant for Layer and the completion block will not be called.
+ @note The receiver must be authenticated else a warning will be logged and `NO` will be returned. The completion is only invoked if the return value is `YES`.
  */
 - (BOOL)synchronizeWithRemoteNotification:(NSDictionary *)userInfo completion:(void(^)(UIBackgroundFetchResult fetchResult, NSError *error))completion;
 
@@ -290,13 +373,35 @@ extern NSString *const LYRClientObjectChangesUserInfoKey;
 ///------------------------------------------
 
 /**
+ @abstract Deletes a message in the specified mode.
+ @param message The message to be deleted.
+ @param mode The deletion mode, specifying how the message is to be deleted (i.e. locally or synchronized across participants).
+ @param error A pointer to an error that upon failure is set to an error object describing why the deletion failed.
+ @return A Boolean value indicating if the request to delete the message was submitted for synchronization.
+ @raises NSInvalidArgumentException Raised if `message` is `nil`.
+ */
+- (BOOL)deleteMessage:(LYRMessage *)message mode:(LYRDeletionMode)deletionMode error:(NSError **)error;
+
+/**
  @abstract Deletes a message.
  @param message The message to be deleted.
  @param error A pointer to an error that upon failure is set to an error object describing why the deletion failed.
  @return A Boolean value indicating if the request to delete the message was submitted for synchronization.
  @raises NSInvalidArgumentException Raised if `message` is `nil`.
+ @warning This method has been deprecated and will be removed in a future version. Use `deleteMessage:mode:error:` instead.
  */
-- (BOOL)deleteMessage:(LYRMessage *)message error:(NSError **)error;
+- (BOOL)deleteMessage:(LYRMessage *)message error:(NSError **)error DEPRECATED_ATTRIBUTE;
+
+/**
+ @abstract Deletes a conversation in the specified mode.
+ @discussion This method deletes a conversation and all associated messages for all current participants.
+ @param conversation The conversation to be deleted.
+ @param mode The deletion mode, specifying how the message is to be deleted (i.e. locally or synchronized across participants).
+ @param error A pointer to an error that upon failure is set to an error object describing why the deletion failed.
+ @return A Boolean value indicating if the request to delete the conversation was submitted for synchronization.
+ @raises NSInvalidArgumentException Raised if `message` is `nil`.
+ */
+- (BOOL)deleteConversation:(LYRConversation *)conversation mode:(LYRDeletionMode)deletionMode error:(NSError **)error;
 
 /**
  @abstract Deletes a conversation.
@@ -305,8 +410,9 @@ extern NSString *const LYRClientObjectChangesUserInfoKey;
  @param error A pointer to an error that upon failure is set to an error object describing why the deletion failed.
  @return A Boolean value indicating if the request to delete the conversation was submitted for synchronization.
  @raises NSInvalidArgumentException Raised if `message` is `nil`.
+ @warning This method has been deprecated and will be removed in a future version. Use `deleteConversation:mode:error:` instead.
  */
-- (BOOL)deleteConversation:(LYRConversation *)conversation error:(NSError **)error;
+- (BOOL)deleteConversation:(LYRConversation *)conversation error:(NSError **)error DEPRECATED_ATTRIBUTE;
 
 ///--------------------------------------------
 /// @name Retrieving Conversations & Messages

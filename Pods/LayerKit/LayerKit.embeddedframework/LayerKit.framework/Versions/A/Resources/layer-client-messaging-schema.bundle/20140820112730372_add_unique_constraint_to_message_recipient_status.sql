@@ -16,7 +16,7 @@ CREATE TABLE message_recipient_status_new (
 );
 
 -- Flush everything from original table to the copy.
-INSERT INTO message_recipient_status_new
+INSERT OR IGNORE INTO message_recipient_status_new
      SELECT database_identifier,
             message_database_identifier,
             user_id,

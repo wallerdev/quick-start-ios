@@ -26,6 +26,7 @@ typedef NS_ENUM(NSUInteger, LYRClientError) {
     // Client Errors
     LYRClientErrorAlreadyConnected                  = 6000,
     LYRClientErrorInvalidAppID                      = 6001,
+    LYRClientErrorNetworkRequestFailed              = 6002,
     
     // Crypto Configuration Errors
     LYRClientErrorKeyPairNotFound                   = 7000,
@@ -33,7 +34,6 @@ typedef NS_ENUM(NSUInteger, LYRClientError) {
     LYRClientErrorIdentityNotFound                  = 7002,
     
     // Authentication
-    LYRClientErrorFailedToPersistSession            = 7003,
     LYRClientErrorNotAuthenticated                  = 7004,
     LYRClientErrorAlreadyAuthenticated              = 7005,
     
