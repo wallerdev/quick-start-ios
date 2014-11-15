@@ -37,8 +37,17 @@ NSString *kIdentityServerURL = @"https://layer-identity-provider.herokuapp.com/i
         //NSError* responseError = nil;
         NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         self.identityToken = responseObject[@"identity_token"];
-        NSLog(@"getIdentityTokenWithCompletion: %@", self.identityToken);
-        completion(YES,responseObject[@"identity_token"],error);
+       NSLog(@"getIdentityTokenWithCompletion: %@", self.identityToken);
+        //NSLog(@"[responseObject[@status]: %@", responseObject[@"status"]);
+        if(![responseObject[@"status"]  isEqual: @"(null)"])
+        {
+            completion(YES,responseObject[@"identity_token"],error);
+        }
+        else
+        {
+            NSError *error = [NSError errorWithDomain:@"Identity Server Error" code:101 userInfo:@{ NSLocalizedDescriptionKey : [NSString stringWithFormat: @"ERROR: Layer Identity server returned a %@", responseObject[@"status"]]}];
+            completion(NO,@"",error);
+        }
     }] resume];
 }
 

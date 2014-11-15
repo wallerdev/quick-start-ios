@@ -11,3 +11,4 @@
 extern NSString * const kUserID;
 extern NSString * const kParticipant;
 extern NSString * const kAppID;
+extern NSString * const kMIMETypeTextPlain;

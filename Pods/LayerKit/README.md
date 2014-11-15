@@ -2,6 +2,8 @@
 
 This repository contains binary distributions of iOS products released by [Layer](http://layer.com).
 
+If you have any questions, comments, or issues related to any products distributed via this repository then please contact the team by emailing [support@layer.com](mailto:support@layer.com). Questions about pricing or product roadmap can be directed to [growth@layer.com](mailto:growth@layer.com).
+
 ## LayerKit
 
 LayerKit is the iOS SDK for interacting with the Layer communications cloud. It provides a simple, object oriented interface to the rich messaging capabilities provided by the platform.
@@ -55,7 +57,7 @@ Once you have finished installing LayerKit via CocoaPods or framework, you can t
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	NSUUID *appID = [[NSUUID alloc] initWithUUIDString:@"INSERT-UUID-HERE"];
-	LYRClient *layerClient = [LYRClient clientWithAppID:LSLayerAppID()];
+	LYRClient *layerClient = [LYRClient clientWithAppID:appID];
 	[layerClient connectWithCompletion:^(BOOL success, NSError *error) {
 		if (success) {
 			NSLog(@"Sucessfully connected to Layer!");

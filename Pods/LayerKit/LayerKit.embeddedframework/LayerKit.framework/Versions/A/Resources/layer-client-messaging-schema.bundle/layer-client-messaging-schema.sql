@@ -1,8 +1,8 @@
-CREATE TABLE conversation_participants (
+CREATE TABLE "conversation_participants" (
   database_identifier INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   conversation_database_identifier INTEGER NOT NULL,
   stream_member_database_identifier INTEGER,
-  member_id STRING NOT NULL,
+  member_id TEXT NOT NULL,
   created_at DATETIME NOT NULL,
   deleted_at DATETIME,
   seq INTEGER,
@@ -39,49 +39,50 @@ CREATE TABLE event_metadata (
   PRIMARY KEY(event_database_identifier, key)
 );
 
-CREATE TABLE events (
+CREATE TABLE "events" (
   database_identifier INTEGER PRIMARY KEY AUTOINCREMENT,
   type INTEGER NOT NULL,
-  creator_id STRING,
+  creator_id TEXT,
   seq INTEGER,
   timestamp INTEGER,
   preceding_seq INTEGER,
   client_seq INTEGER NOT NULL,
   subtype INTEGER,
   external_content_id BLOB,
-  member_id STRING,
+  member_id TEXT,
   target_seq INTEGER,
   stream_database_identifier INTEGER NOT NULL,
-  version INT, client_id STRING,
+  version INTEGER, 
+  client_id TEXT,
   UNIQUE(stream_database_identifier, seq),
   FOREIGN KEY(stream_database_identifier) REFERENCES streams(database_identifier) ON DELETE CASCADE
 );
 
-CREATE TABLE keyed_values (
+CREATE TABLE "keyed_values" (
   database_identifier INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  object_type STRING NOT NULL,
+  object_type TEXT NOT NULL,
   object_id INTEGER NOT NULL,
   key_type INTEGER NOT NULL,
-  key STRING NOT NULL,
+  key TEXT NOT NULL,
   value BLOB NOT NULL,
   deleted_at DATETIME,
   seq INTEGER,
   UNIQUE(object_type, object_id, key)
 );
 
-CREATE TABLE message_parts (
+CREATE TABLE "message_parts" (
   database_identifier INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   message_database_identifier INTEGER NOT NULL,
-  mime_type STRING NOT NULL,
+  mime_type TEXT NOT NULL,
   content BLOB,
-  url STRING,
+  url TEXT,
   FOREIGN KEY(message_database_identifier) REFERENCES messages(database_identifier) ON DELETE CASCADE
 );
 
 CREATE TABLE "message_recipient_status" (
     database_identifier INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     message_database_identifier INTEGER NOT NULL,
-    user_id STRING,
+    user_id TEXT,
     status INTEGER NOT NULL,
     seq INTEGER,
     UNIQUE (message_database_identifier, user_id, status),
@@ -94,13 +95,13 @@ CREATE TABLE "messages" (
   sent_at DATETIME,
   received_at DATETIME,
   deleted_at DATETIME,
-  user_id STRING NOT NULL,
+  user_id TEXT NOT NULL,
   seq INTEGER,
   conversation_database_identifier INTEGER NOT NULL,
   event_database_identifier INTEGER UNIQUE,
-  version INT NOT NULL,
+  version INTEGER NOT NULL,
   object_identifier TEXT UNIQUE NOT NULL,
-  message_index INT,
+  message_index INTEGER,
   UNIQUE(conversation_database_identifier, seq),
   FOREIGN KEY(conversation_database_identifier) REFERENCES conversations(database_identifier) ON DELETE CASCADE,
   FOREIGN KEY(event_database_identifier) REFERENCES events(database_identifier) ON DELETE CASCADE
@@ -113,20 +114,23 @@ CREATE TABLE schema_migrations (
 CREATE TABLE "stream_members" (
   database_identifier INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   stream_database_identifier INTEGER NOT NULL,
-  member_id STRING NOT NULL,
+  member_id TEXT NOT NULL,
   deleted_at DATETIME,
   seq INTEGER,
   UNIQUE (stream_database_identifier, member_id),
   FOREIGN KEY(stream_database_identifier) REFERENCES streams(database_identifier) ON DELETE CASCADE
 );
 
-CREATE TABLE streams (
+CREATE TABLE "streams" (
   database_identifier INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   stream_id BLOB UNIQUE,
   seq INTEGER NOT NULL DEFAULT 0,
   client_seq INTEGER NOT NULL DEFAULT 0,
-  version INT
-, deleted_at DATETIME, client_id STRING, min_synced_seq INTEGER, max_synced_seq INTEGER);
+  version INTEGER, 
+  client_id TEXT, 
+  deleted_at DATETIME, 
+  min_synced_seq INTEGER, 
+  max_synced_seq INTEGER);
 
 CREATE TABLE syncable_changes (
   change_identifier INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -370,3 +374,5 @@ INSERT INTO schema_migrations (version) VALUES (20141007110138268);
 INSERT INTO schema_migrations (version) VALUES (20141009125004707);
 
 INSERT INTO schema_migrations (version) VALUES (20141009125010758);
+
+INSERT INTO schema_migrations (version) VALUES (20141027152445461);

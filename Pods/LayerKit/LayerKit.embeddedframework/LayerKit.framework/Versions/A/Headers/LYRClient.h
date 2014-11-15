@@ -82,6 +82,33 @@ extern NSString *const LYRClientDidDisconnectNotification;
  */
 extern NSString *const LYRClientOperationErrorUserInfoKey;
 
+/**
+ @abstract Posted when a conversation object receives a change in typing indicator state.
+ @discussion The `object` of the `NSNotification` is the `LYRConversation` that received the typing indicator.
+ */
+extern NSString *const LYRConversationDidReceiveTypingIndicatorNotification;
+
+/**
+ @abstract A key into the user info of a `LYRConversationDidReceiveTypingIndicatorNotification` notification whose value is
+ a `NSNumber` containing a unsigned integer whose value corresponds to a `LYRTypingIndicator`.
+ */
+extern NSString *const LYRTypingIndicatorValueUserInfoKey;
+
+/**
+ @abstract A key into the user info of a `LYRConversationDidReceiveTypingIndicatorNotification` notification whose value is
+ a `NSString` specifying the participant who changed typing state.
+ */
+extern NSString *const LYRTypingIndicatorParticipantUserInfoKey;
+
+/**
+ @abstract The `LYRTypingIndicator` enumeration describes the states of a typing status of a participant in a conversation.
+ */
+typedef NS_ENUM(NSUInteger, LYRTypingIndicator) {
+    LYRTypingDidBegin   = 0,
+    LYRTypingDidPause   = 1,
+    LYRTypingDidFinish  = 2
+};
+
 ///----------------------
 /// @name Client Delegate
 ///----------------------
@@ -414,9 +441,20 @@ extern NSString *const LYRClientOperationErrorUserInfoKey;
  */
 - (BOOL)deleteConversation:(LYRConversation *)conversation error:(NSError **)error DEPRECATED_ATTRIBUTE;
 
+///------------------------
+/// @name Typing Indicators
+///------------------------
+
+/**
+ @abstract Sends a typing indicator to the specified conversation.
+ @param typingIndicator An `LYRTypingIndicator` value indicating the change in typing state to be sent.
+ @param conversation The conversation that the typing indicator should be sent to.
+ */
+- (void)sendTypingIndicator:(LYRTypingIndicator)typingIndicator toConversation:(LYRConversation *)conversation;
+
 ///--------------------------------------------
 /// @name Retrieving Conversations & Messages
-///--------------------------------------------
+///------------------------------------------
 
 /**
  @abstract Retrieves a collection of conversation objects from the persistent store for the given list of conversation identifiers.
@@ -441,5 +479,22 @@ extern NSString *const LYRClientOperationErrorUserInfoKey;
  @return An set of messages for the given conversation.
  */
 - (NSOrderedSet *)messagesForConversation:(LYRConversation *)conversation;
+
+///------------------------------
+/// @name Counting Unread Content
+///------------------------------
+
+/**
+ @abstract Returns the number of conversations that have one or more unread messages.
+ @return The number of conversations with unread messages.
+ */
+- (NSUInteger)countOfConversationsWithUnreadMessages;
+
+/**
+ @abstract Returns the number of unread messages in the given conversation.
+ @discussion A count of unread messages across all conversations can be obtained by passing `nil`.
+ @param conversation The conversation to count the unread messages for or `nil` to count across all conversations.
+ */
+- (NSUInteger)countOfUnreadMessagesInConversation:(LYRConversation *)conversation;
 
 @end

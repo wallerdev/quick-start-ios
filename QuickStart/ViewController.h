@@ -16,9 +16,18 @@
 @property (nonatomic, retain) IBOutlet UITextView *textView;
 @property (nonatomic, retain) UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIButton *sendBtn;
+
 @property (nonatomic, retain) LYRClient *layerClient;
+@property (nonatomic) LYRConversation *conversation;
+
+@property (nonatomic, retain) IBOutlet UITextView *chatView;
+@property (nonatomic, retain) UIScrollView *chatScrollView;
+
+@property (nonatomic, retain) IBOutlet UITextField *textField;
+
 
 - (void)logMessage:(NSString*) messageText;
+- (void)updateChatArea:(LYRConversation*) conversation;
 
 @end
 
