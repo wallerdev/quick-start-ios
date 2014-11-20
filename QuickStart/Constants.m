@@ -18,6 +18,5 @@ NSString * const kUserID = @"Device";
 NSString * const kParticipant = @"Simulator";
 #endif
 
-//NSString * const kAppID = @"1ad97934-6c39-11e4-8185-1ded050004dd";
-NSString * const kAppID = @"5a731a4c-63be-11e4-9124-aaa5020075f8";
+NSString * const kAppID = @"YOUR_APP_ID";
 NSString * const kMIMETypeTextPlain = @"text/plain";
