@@ -238,8 +238,24 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
         
         // Deserialize the response
         NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-        NSString *identityToken = responseObject[@"identity_token"];
-        completion(identityToken, nil);
+        if(![responseObject valueForKey:@"error"])
+        {
+            NSString *identityToken = responseObject[@"identity_token"];
+            completion(identityToken, nil);
+        }
+        else
+        {
+            NSString *domain = @"layer-identity-provider.herokuapp.com";
+            NSInteger code = [responseObject[@"status"] integerValue];
+            NSDictionary *userInfo =
+            @{
+               NSLocalizedDescriptionKey: @"Layer Identity Provider Returned an Error.",
+               NSLocalizedRecoverySuggestionErrorKey: @"There may be a problem with your APPID."
+            };
+           
+            NSError *error = [[NSError alloc] initWithDomain:domain code:code userInfo:userInfo];
+            completion(nil, error);
+        }
         
     }] resume];
 }
