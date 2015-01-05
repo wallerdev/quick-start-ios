@@ -260,7 +260,7 @@ static UIColor *LSRandomColor(void)
     // If no conversations exist, create a new conversation object with a single participant
     if (!self.conversation) {
         NSError *error = nil;
-        self.conversation = [self.layerClient newConversationWithParticipants:[NSSet setWithArray:@[ LQSCurrentUserID, LQSParticipantUserID ]] options:nil error:&error];
+        self.conversation = [self.layerClient newConversationWithParticipants:[NSSet setWithArray:@[ LQSParticipantUserID ]] options:nil error:&error];
         if (!self.conversation) {
             NSLog(@"New Conversation creation failed: %@", error);
         }
@@ -422,7 +422,6 @@ static UIColor *LSRandomColor(void)
     // For more information about Synchronization, check out https://developer.layer.com/docs/integration/ios#synchronization
     if (!self.conversation) {
         [self fetchLayerConversation];
-        [self setupQueryController];
         [self.tableView reloadData];
     }
     // Get nav bar colors from conversation metadata
