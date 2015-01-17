@@ -12,6 +12,7 @@
 // Defined in LQSAppDelegate.m
 extern NSString *const LQSCurrentUserID;
 extern NSString *const LQSParticipantUserID;
+extern NSString *const LQSParticipant2UserID;
 extern NSString *const LQSInitialMessageText;
 
 // Metadata keys related to navbar color
@@ -76,12 +77,19 @@ static UIColor *LSRandomColor(void)
     
     // Setup for Shake
     [self becomeFirstResponder];
-    
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:LQSLogoImageName]];
+
+    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:LQSLogoImageName]];
+    logoImageView.frame = CGRectMake(0, 0, 36, 36);
+    logoImageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.navigationItem.titleView = logoImageView;
     self.navigationItem.hidesBackButton = YES;
     
     self.inputTextView.delegate = self;
     self.inputTextView.text = LQSInitialMessageText;
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [self scrollToBottom];
 }
 
 - (void)dealloc
@@ -114,13 +122,14 @@ static UIColor *LSRandomColor(void)
     // For more information about Querying, check out https://developer.layer.com/docs/integration/ios#querying
     
     LYRQuery *query = [LYRQuery queryWithClass:[LYRConversation class]];
-    query.predicate = [LYRPredicate predicateWithProperty:@"participants" operator:LYRPredicateOperatorIsEqualTo value:@[ LQSCurrentUserID, LQSParticipantUserID ]];
-    query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:YES] ];
+    
+    query.predicate = [LYRPredicate predicateWithProperty:@"participants" operator:LYRPredicateOperatorIsEqualTo value:@[ LQSCurrentUserID, LQSParticipantUserID, LQSParticipant2UserID ]];
+    query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO] ];
     
     NSError *error;
     NSOrderedSet *conversations = [self.layerClient executeQuery:query error:&error];
     if (!error) {
-        NSLog(@"%tu conversations with participants %@", conversations.count, @[ LQSCurrentUserID, LQSParticipantUserID ]);
+        NSLog(@"%tu conversations with participants %@", conversations.count, @[ LQSCurrentUserID, LQSParticipantUserID, LQSParticipant2UserID ]);
     } else {
         NSLog(@"Query failed with error %@", error);
     }
@@ -141,7 +150,7 @@ static UIColor *LSRandomColor(void)
     // Query for all the messages in conversation sorted by index
     LYRQuery *query = [LYRQuery queryWithClass:[LYRMessage class]];
     query.predicate = [LYRPredicate predicateWithProperty:@"conversation" operator:LYRPredicateOperatorIsEqualTo value:self.conversation];
-    query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:NO]];
+    query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES]];
     
     // Set up query controller
     self.queryController = [self.layerClient queryControllerWithQuery:query];
@@ -260,7 +269,7 @@ static UIColor *LSRandomColor(void)
     // If no conversations exist, create a new conversation object with a single participant
     if (!self.conversation) {
         NSError *error = nil;
-        self.conversation = [self.layerClient newConversationWithParticipants:[NSSet setWithArray:@[ LQSParticipantUserID ]] options:nil error:&error];
+        self.conversation = [self.layerClient newConversationWithParticipants:[NSSet setWithArray:@[ LQSParticipantUserID, LQSParticipant2UserID  ]] options:nil error:&error];
         if (!self.conversation) {
             NSLog(@"New Conversation creation failed: %@", error);
         }
@@ -270,7 +279,8 @@ static UIColor *LSRandomColor(void)
     LYRMessagePart *messagePart = [LYRMessagePart messagePartWithText:messageText];
     
     // Creates and returns a new message object with the given conversation and array of message parts
-    LYRMessage *message = [self.layerClient newMessageWithParts:@[messagePart] options:@{LYRMessageOptionsPushNotificationAlertKey: messageText} error:nil];
+    NSString *pushMessage= [NSString stringWithFormat:@"%@ says %@",self.layerClient.authenticatedUserID ,messageText];
+    LYRMessage *message = [self.layerClient newMessageWithParts:@[messagePart] options:@{LYRMessageOptionsPushNotificationAlertKey: pushMessage} error:nil];
     
     // Sends the specified message
     NSError *error;
@@ -396,6 +406,7 @@ static UIColor *LSRandomColor(void)
         default:
             break;
     }
+    [self scrollToBottom];
 }
 
 - (void)queryControllerDidChangeContent:(LYRQueryController *)queryController
@@ -429,6 +440,15 @@ static UIColor *LSRandomColor(void)
 }
 
 #pragma - mark General Helper Methods
+
+-(void)scrollToBottom{
+    [self.tableView reloadData];
+    NSIndexPath* ip = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
+    if(self.conversation)
+    {
+        [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    }
+}
 
 -(void)setNavbarColorFromConversationMetadata:(NSDictionary *)metadata
 {

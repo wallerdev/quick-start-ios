@@ -26,6 +26,7 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
     NSString *const LQSParticipantUserID = @"Simulator";
     NSString *const LQSInitialMessageText =  @"Hey Simulator! This is your friend, Device.";
 #endif
+    NSString *const LQSParticipant2UserID = @"Dashboard";
 
 @interface LQSAppDelegate () <LYRClientDelegate>
 
@@ -45,7 +46,7 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
         
         //Show a usage the first time the app is launched
         [self showFirstTimeMessage];
-        
+
         // Initializes a LYRClient object
         NSUUID *appID = [[NSUUID alloc] initWithUUIDString:LQSLayerAppIDString];
         self.layerClient = [LYRClient clientWithAppID:appID];
@@ -73,6 +74,11 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
         [(LQSViewController *)navigationController.topViewController setLayerClient:self.layerClient];
     }
     return YES;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    application.applicationIconBadgeNumber = 0;
 }
 
 #pragma mark - Push Notification Methods
@@ -103,7 +109,7 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
     NSError *error;
     BOOL success = [self.layerClient updateRemoteNotificationDeviceToken:deviceToken error:&error];
     if (success) {
-        NSLog(@"Application did register for remote notifications.");
+        NSLog(@"Application did register for remote notifications: %@", deviceToken);
     } else {
         NSLog(@"Failed updating device token with error: %@", error);
     }
@@ -121,12 +127,23 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
     __block LYRMessage *message = [self messageFromRemoteNotification:userInfo];
     
     NSError *error;
-    BOOL success = [self.layerClient synchronizeWithRemoteNotification:userInfo completion:^(UIBackgroundFetchResult fetchResult, NSError *error) {
-        if (fetchResult == UIBackgroundFetchResultFailed) {
-            NSLog(@"Failed processing remote notification: %@", error);
+     BOOL success = [self.layerClient synchronizeWithRemoteNotification:userInfo completion:^(NSArray *changes, NSError *error) {
+        if (changes)
+        {
+            if ([changes count])
+            {
+                message = [self messageFromRemoteNotification:userInfo];
+                completionHandler(UIBackgroundFetchResultNewData);
+            }
+            else
+            {
+                completionHandler(UIBackgroundFetchResultNoData);
+            }
         }
-        message = [self messageFromRemoteNotification:userInfo];
-        completionHandler(fetchResult);
+        else
+        {
+            completionHandler(UIBackgroundFetchResultFailed);
+        }
     }];
     
     if (success) {
@@ -152,9 +169,13 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
     NSOrderedSet *messages = [self.layerClient executeQuery:query error:&error];
     if (!error) {
         NSLog(@"Query contains %lu messages", (unsigned long)messages.count);
+        LYRMessage *message= messages.firstObject;
+        LYRMessagePart *messagePart = message.parts[0];
+        NSLog(@"Pushed Message Contents: %@",[[NSString alloc] initWithData:messagePart.data encoding:NSUTF8StringEncoding]);
     } else {
         NSLog(@"Query failed with error %@", error);
     }
+    
     return [messages firstObject];
 }
 
@@ -304,7 +325,7 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
 
 - (void)layerClientDidDisconnect:(LYRClient *)client
 {
-    NSLog(@"Layer Client did disconnect with error");
+    NSLog(@"Layer Client did disconnect");
 }
 
 #pragma mark - First Run Notification 
