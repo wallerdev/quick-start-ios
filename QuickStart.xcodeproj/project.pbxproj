@@ -12,7 +12,6 @@
 		884A72D71A302EE00069F62C /* LQSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 884A72D61A302EE00069F62C /* LQSViewController.m */; };
 		884A72DA1A302EE00069F62C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 884A72D81A302EE00069F62C /* Main.storyboard */; };
 		884A72DC1A302EE00069F62C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 884A72DB1A302EE00069F62C /* Images.xcassets */; };
-		884A72DF1A302EE00069F62C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 884A72DD1A302EE00069F62C /* LaunchScreen.xib */; };
 		884A72EB1A302EE00069F62C /* QuickStartTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 884A72EA1A302EE00069F62C /* QuickStartTests.m */; };
 		884A72F91A302F440069F62C /* LQSChatMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 884A72F81A302F440069F62C /* LQSChatMessageCell.m */; };
 		96852B4A094C4E1444E747C4 /* libPods-QuickStart.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC611513A36DC3FAA3D3503 /* libPods-QuickStart.a */; };
@@ -40,7 +39,6 @@
 		884A72D61A302EE00069F62C /* LQSViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = LQSViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		884A72D91A302EE00069F62C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		884A72DB1A302EE00069F62C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		884A72DE1A302EE00069F62C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		884A72E41A302EE00069F62C /* QuickStartTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuickStartTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		884A72E91A302EE00069F62C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		884A72EA1A302EE00069F62C /* QuickStartTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = QuickStartTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -151,7 +149,6 @@
 			isa = PBXGroup;
 			children = (
 				884A72D81A302EE00069F62C /* Main.storyboard */,
-				884A72DD1A302EE00069F62C /* LaunchScreen.xib */,
 				884A72F71A302F440069F62C /* LQSChatMessageCell.h */,
 				884A72F81A302F440069F62C /* LQSChatMessageCell.m */,
 			);
@@ -257,7 +254,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				884A72DA1A302EE00069F62C /* Main.storyboard in Resources */,
-				884A72DF1A302EE00069F62C /* LaunchScreen.xib in Resources */,
 				884A72DC1A302EE00069F62C /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -341,14 +337,6 @@
 				884A72D91A302EE00069F62C /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		884A72DD1A302EE00069F62C /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				884A72DE1A302EE00069F62C /* Base */,
-			);
-			name = LaunchScreen.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -439,6 +427,7 @@
 			baseConfigurationReference = CF844DA0B549E45D5F7C9DCE /* Pods-QuickStart.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = QuickStart/Info.plist;
@@ -454,6 +443,7 @@
 			baseConfigurationReference = 557830992B049729272A99B2 /* Pods-QuickStart.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = QuickStart/Info.plist;
