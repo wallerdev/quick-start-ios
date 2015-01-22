@@ -34,6 +34,8 @@ static NSString *const LQSChatMessageCellReuseIdentifier = @"ChatMessageCell";
 static NSString *const LQSLogoImageName = @"Logo";
 static CGFloat const LQSKeyboardHeight = 255.0f;
 
+static NSInteger const LQSMaxCharacterLimit = 66;
+
 static NSDateFormatter *LQSDateFormatter()
 {
     static NSDateFormatter *dateFormatter;
@@ -112,6 +114,17 @@ static UIColor *LSRandomColor(void)
                                              selector:@selector(didReceiveTypingIndicator:)
                                                  name:LYRConversationDidReceiveTypingIndicatorNotification
                                                object:self.conversation];
+    
+    // Register for synchronization notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveLayerClientWillBeginSynchronizationNotification:)
+                                                 name:LYRClientWillBeginSynchronizationNotification
+                                               object:self.layerClient];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveLayerClientDidFinishSynchronizationNotification:)
+                                                 name:LYRClientDidFinishSynchronizationNotification
+                                               object:self.layerClient];
 }
 
 #pragma mark - Fetching Layer Content
@@ -192,25 +205,24 @@ static UIColor *LSRandomColor(void)
     LYRMessagePart *messagePart = message.parts[0];
     cell.messageLabel.text = [[NSString alloc] initWithData:messagePart.data encoding:NSUTF8StringEncoding];
     
-    // Set Sender Info
-    cell.deviceLabel.text = message.sentByUserID;
+    NSString *timestampText = @"";
     
     // If the message was sent by current user, show Receipent Status Indicators
     if ([message.sentByUserID isEqualToString:LQSCurrentUserID]) {
         switch ([message recipientStatusForUserID:LQSParticipantUserID]) {
             case LYRRecipientStatusSent:
                 [cell.messageStatus setImage:[UIImage imageNamed:LQSMessageSentImageName]];
-                cell.timestampLabel.text = [NSString stringWithFormat:@"Sent: %@",[LQSDateFormatter() stringFromDate:message.sentAt]];
+                timestampText = [NSString stringWithFormat:@"Sent: %@",[LQSDateFormatter() stringFromDate:message.sentAt]];
                 break;
                 
             case LYRRecipientStatusDelivered:
                 [cell.messageStatus setImage:[UIImage imageNamed:LQSMessageDeliveredImageName]];
-                cell.timestampLabel.text = [NSString stringWithFormat:@"Delivered: %@",[LQSDateFormatter() stringFromDate:message.sentAt]];
+                timestampText = [NSString stringWithFormat:@"Delivered: %@",[LQSDateFormatter() stringFromDate:message.sentAt]];
                 break;
                 
             case LYRRecipientStatusRead:
                 [cell.messageStatus setImage:[UIImage imageNamed:LQSMessageReadImageName]];
-                cell.timestampLabel.text = [NSString stringWithFormat:@"Read: %@",[LQSDateFormatter() stringFromDate:message.receivedAt]];
+                timestampText = [NSString stringWithFormat:@"Read: %@",[LQSDateFormatter() stringFromDate:message.receivedAt]];
                 break;
                 
             case LYRRecipientStatusInvalid:
@@ -221,13 +233,10 @@ static UIColor *LSRandomColor(void)
                 break;
         }
     } else {
-        cell.timestampLabel.text = [NSString stringWithFormat:@"Sent: %@",[LQSDateFormatter() stringFromDate:message.sentAt]];
+        timestampText = [NSString stringWithFormat:@"Sent: %@",[LQSDateFormatter() stringFromDate:message.sentAt]];
     }
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 78;
+    
+    cell.deviceLabel.text = [NSString stringWithFormat:@"%@ @ %@", message.sentByUserID, timestampText];
 }
 
 #pragma mark - Receiving Typing Indicator
@@ -367,7 +376,9 @@ static UIColor *LSRandomColor(void)
         [self moveViewUpToShowKeyboard:NO];
         return NO;
     }
-    return YES;
+    
+    int limit = LQSMaxCharacterLimit;
+    return !([self.inputTextView.text length]>limit && [text length] > range.length);
 }
 
 #pragma mark - Query Controller Delegate Methods
@@ -406,15 +417,16 @@ static UIColor *LSRandomColor(void)
         default:
             break;
     }
-    [self scrollToBottom];
 }
 
 - (void)queryControllerDidChangeContent:(LYRQueryController *)queryController
 {
     [self.tableView endUpdates];
+    [self scrollToBottom];
+
 }
 
-#pragma - mark LYRQueryControllerDelegate Delegate Methods
+#pragma mark - Layer Sync Notification Handler
 
 - (void)didReceiveLayerClientWillBeginSynchronizationNotification:(NSNotification *)notification
 {
@@ -442,11 +454,10 @@ static UIColor *LSRandomColor(void)
 #pragma - mark General Helper Methods
 
 -(void)scrollToBottom{
-    [self.tableView reloadData];
-    NSIndexPath* ip = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
     if(self.conversation)
     {
-        [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        NSIndexPath* ip = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
+        [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
 }
 
