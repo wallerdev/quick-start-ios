@@ -67,3 +67,4 @@ hash pod >/dev/null && /usr/bin/env pod install || {
 echo "4. Congrats, you're finished! Now opening XCode. Press CMD-R to run the Project"
 open "$INSTALL_DIR/QuickStart.xcworkspace"
 open "https://developer.layer.com/docs/quick-start/ios"
+
