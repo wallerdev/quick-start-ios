@@ -9,7 +9,7 @@
 # This is the Layer Quick Start install script for iOS
 #
 #    Install the Quick Start project by running this command:
-#    curl -L https://raw.githubusercontent.com/layer/quick-start-ios/master/install.sh | bash -s "<YOUR_APP_ID>"
+#    curl -L https://raw.githubusercontent.com/layerhq/quick-start-ios/master/install.sh | bash -s "<YOUR_APP_ID>"
 #
 # Files will be installed in ~/Downloads/ folder.
 # 
