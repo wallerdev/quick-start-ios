@@ -14,7 +14,7 @@
 # Files will be installed in ~/Downloads/ folder.
 # 
 # This script requires that 'git' and 'cocoapods' are already installed.
-
+echo "Welcome to the Layer Quick Start install script for iOS"
 echo "This script will:"
 echo "1. Download the latest Quick Start project"
 echo "2. Inject your app id"
@@ -36,7 +36,7 @@ INSTALL_DIR="$HOME/Downloads/quick-start-ios".$current_time
 mkdir -p "$INSTALL_DIR"
 
 # Download the latest Quick Start project from Github
-
+echo "##########################################"
 echo "1. Downloading Latest Layer Quickstart app"
 hash git >/dev/null 2>&1 && env git clone --depth=1 https://github.com/layerhq/quick-start-ios.git $INSTALL_DIR || {
   echo "You need to install git to continue: http://git-scm.com/download/mac"
