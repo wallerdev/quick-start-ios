@@ -46,15 +46,11 @@ echo "QuickStart has been installed in your home directory (~/Downloads/quick-st
 
 # Update the generic XCode project with your App ID
 
-APP_ID="LAYER_APP_ID"		
-if [ "$1" ] ; then
-	APP_ID=$1
-	echo "2. Injecting App ID: $APP_ID in the project"	
-	if [ "$APP_ID" != "APP ID" ]; then
-		sed -i '' -e "s/LQSLayerAppIDString \= \@\"LAYER_APP_ID\"/LQSLayerAppIDString = \@\"$APP_ID\"/" $INSTALL_DIR/QuickStart/LQSAppDelegate.m
-	fi
+if [[ "$1" =~ [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12} ]]; then
+	echo "2. Injecting App ID: $1 in the project"	
+	sed -i '' -e "s/LQSLayerAppIDString \= \@\"LAYER_APP_ID\"/LQSLayerAppIDString = \@\"$1\"/" $INSTALL_DIR/QuickStart/LQSAppDelegate.m
 else
-	echo "2: Skipping Step - No App ID provided."	
+	echo "2: Skipping Step - No Valid App ID provided."	
 fi
 
 # Install the latest LayerKit using Cocoapods
