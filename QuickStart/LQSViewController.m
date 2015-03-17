@@ -160,10 +160,10 @@ static UIColor *LSRandomColor(void)
 {
     // For more information about the Query Controller, check out https://developer.layer.com/docs/integration/ios#querying
     
-    // Query for all the messages in conversation sorted by index
+    // Query for all the messages in conversation sorted by position
     LYRQuery *query = [LYRQuery queryWithClass:[LYRMessage class]];
     query.predicate = [LYRPredicate predicateWithProperty:@"conversation" operator:LYRPredicateOperatorIsEqualTo value:self.conversation];
-    query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES]];
+    query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES]];
     
     // Set up query controller
     self.queryController = [self.layerClient queryControllerWithQuery:query];
