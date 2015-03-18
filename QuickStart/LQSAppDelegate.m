@@ -76,11 +76,6 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
     return YES;
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    application.applicationIconBadgeNumber = 0;
-}
-
 #pragma mark - Push Notification Methods
 
 - (void)registerApplicationForPushNotifications:(UIApplication *)application
@@ -117,12 +112,6 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    // Increment badge count if a message
-    if ([[userInfo valueForKeyPath:@"aps.content-available"] integerValue] != 0) {
-        NSInteger badgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber];
-        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeNumber + 1];
-    }
-
     // Get Message from Metadata
     __block LYRMessage *message = [self messageFromRemoteNotification:userInfo];
     
