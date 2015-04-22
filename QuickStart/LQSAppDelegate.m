@@ -151,8 +151,8 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
     NSURL *messageURL = [NSURL URLWithString:[remoteNotification valueForKeyPath:LQSPushMessageIdentifierKeyPath]];
     
     // Retrieve LYRMessage from Message URL
-    LYRQuery *query = [LYRQuery queryWithClass:[LYRMessage class]];
-    query.predicate = [LYRPredicate predicateWithProperty:@"identifier" operator:LYRPredicateOperatorIsIn value:[NSSet setWithObject:messageURL]];
+    LYRQuery *query = [LYRQuery queryWithQueryableClass:[LYRMessage class]];
+    query.predicate = [LYRPredicate predicateWithProperty:@"identifier" predicateOperator:LYRPredicateOperatorIsIn value:[NSSet setWithObject:messageURL]];
     
     NSError *error;
     NSOrderedSet *messages = [self.layerClient executeQuery:query error:&error];

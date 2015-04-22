@@ -134,9 +134,9 @@ static UIColor *LSRandomColor(void)
     // Fetches all conversations between the authenticated user and the supplied participant
     // For more information about Querying, check out https://developer.layer.com/docs/integration/ios#querying
     
-    LYRQuery *query = [LYRQuery queryWithClass:[LYRConversation class]];
+    LYRQuery *query = [LYRQuery queryWithQueryableClass:[LYRConversation class]];
     
-    query.predicate = [LYRPredicate predicateWithProperty:@"participants" operator:LYRPredicateOperatorIsEqualTo value:@[ LQSCurrentUserID, LQSParticipantUserID, LQSParticipant2UserID ]];
+    query.predicate = [LYRPredicate predicateWithProperty:@"participants" predicateOperator:LYRPredicateOperatorIsEqualTo value:@[ LQSCurrentUserID, LQSParticipantUserID, LQSParticipant2UserID ]];
     query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO] ];
     
     NSError *error;
@@ -161,8 +161,8 @@ static UIColor *LSRandomColor(void)
     // For more information about the Query Controller, check out https://developer.layer.com/docs/integration/ios#querying
     
     // Query for all the messages in conversation sorted by position
-    LYRQuery *query = [LYRQuery queryWithClass:[LYRMessage class]];
-    query.predicate = [LYRPredicate predicateWithProperty:@"conversation" operator:LYRPredicateOperatorIsEqualTo value:self.conversation];
+    LYRQuery *query = [LYRQuery queryWithQueryableClass:[LYRMessage class]];
+    query.predicate = [LYRPredicate predicateWithProperty:@"conversation" predicateOperator:LYRPredicateOperatorIsEqualTo value:self.conversation];
     query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES]];
     
     // Set up query controller
