@@ -233,7 +233,8 @@ static UIColor *LSRandomColor(void)
                 break;
         }
     } else {
-        timestampText = [NSString stringWithFormat:@"Sent: %@",[LQSDateFormatter() stringFromDate:message.sentAt]];
+        [message markAsRead:nil];
+        timestampText = [NSString stringWithFormat:@"Received: %@",[LQSDateFormatter() stringFromDate:message.sentAt]];
     }
     
     cell.deviceLabel.text = [NSString stringWithFormat:@"%@ @ %@", message.sentByUserID, timestampText];
