@@ -208,7 +208,7 @@ static UIColor *LSRandomColor(void)
     NSString *timestampText = @"";
     
     // If the message was sent by current user, show Receipent Status Indicators
-    if ([message.sentByUserID isEqualToString:LQSCurrentUserID]) {
+    if ([message.sender.userID isEqualToString:LQSCurrentUserID]) {
         switch ([message recipientStatusForUserID:LQSParticipantUserID]) {
             case LYRRecipientStatusSent:
                 [cell.messageStatus setImage:[UIImage imageNamed:LQSMessageSentImageName]];
@@ -237,7 +237,7 @@ static UIColor *LSRandomColor(void)
         timestampText = [NSString stringWithFormat:@"Received: %@",[LQSDateFormatter() stringFromDate:message.sentAt]];
     }
     
-    cell.deviceLabel.text = [NSString stringWithFormat:@"%@ @ %@", message.sentByUserID, timestampText];
+    cell.deviceLabel.text = [NSString stringWithFormat:@"%@ @ %@", message.sender.userID, timestampText];
 }
 
 #pragma mark - Receiving Typing Indicator
