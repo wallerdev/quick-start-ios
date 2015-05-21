@@ -13,7 +13,7 @@ The Quick Start application requires Xcode and the iOS SDK v8.0. Dependencies ar
 1. Clone the project from Github: `$ git clone https://github.com/layerhq/quick-start-ios.git`
 2. Install the dependencies via CocoaPods: `$ pod install`
 3. Open `QuickStart.xcworkspace` in Xcode.
-4. Replace LAYER_APP_ID in LQSAppDelegate.m (line 16) with your App ID from http://developer.layer.com.  If you skip this step you will get an error on app launch.
+4. Replace LAYER_APP_ID in LQSAppDelegate.m (line 16) with your App ID from the developer dashboard (http://developer.layer.com) under the "Info" section.  If you skip this step you will get an error on app launch.
 5. Build and run the Quick Start application on a Simulator and a physical Device to start a 1:1 conversation between them.
 
 NOTE: If you shake the Device the navbar color will change on both the Simulator and Device.
