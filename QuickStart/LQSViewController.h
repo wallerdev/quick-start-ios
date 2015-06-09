@@ -18,4 +18,9 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet UILabel *typingIndicatorLabel;
 
+- (IBAction)clearButtonPressed:(UIBarButtonItem *)sender;
+- (IBAction)CameraButtonPressed:(UIBarButtonItem *)sender;
+
+
+
 @end

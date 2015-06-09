@@ -36,6 +36,8 @@ static CGFloat const LQSKeyboardHeight = 255.0f;
 
 static NSInteger const LQSMaxCharacterLimit = 66;
 
+static NSString *const MIMETypeImagePNG = @"image/png";
+
 static NSDateFormatter *LQSDateFormatter()
 {
     static NSDateFormatter *dateFormatter;
@@ -59,10 +61,12 @@ static UIColor *LSRandomColor(void)
                            alpha:1.0f];
 }
 
-@interface LQSViewController () <UITextViewDelegate, LYRQueryControllerDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface LQSViewController () <UITextViewDelegate, LYRQueryControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property (nonatomic) LYRConversation *conversation;
 @property (nonatomic, retain) LYRQueryController *queryController;
+@property (nonatomic) BOOL sendingImage;
+@property (strong,nonatomic) UIImage *photo; //this is where the selected photo will be stored
 
 @end
 
@@ -79,7 +83,7 @@ static UIColor *LSRandomColor(void)
     
     // Setup for Shake
     [self becomeFirstResponder];
-
+    
     UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:LQSLogoImageName]];
     logoImageView.frame = CGRectMake(0, 0, 36, 36);
     logoImageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -192,19 +196,31 @@ static UIColor *LSRandomColor(void)
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Set up custom ChatMessageCell for displaying message
+    //LQSPictureMessageCell
     LQSChatMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:LQSChatMessageCellReuseIdentifier forIndexPath:indexPath];
+    if (!cell) {
+        cell = [[LQSChatMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:LQSChatMessageCellReuseIdentifier];
+    }
+    [self configureCell:cell forRowAtIndexPath:indexPath];
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(LQSChatMessageCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)configureCell:(LQSChatMessageCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Get Message Object from queryController
     LYRMessage *message = [self.queryController objectAtIndexPath:indexPath];
-    
-    // Set Message Text
     LYRMessagePart *messagePart = message.parts[0];
-    cell.messageLabel.text = [[NSString alloc] initWithData:messagePart.data encoding:NSUTF8StringEncoding];
     
+    //If it is type image
+    if ([messagePart.MIMEType isEqualToString:@"image/png"]) {
+        cell.messageLabel.text = @""; //
+        [cell updateWithImage:[[UIImage alloc]initWithData:messagePart.data]];
+        
+    } else {
+        [cell removeImage]; //just a safegaurd to ensure  that no image is present
+        [cell assignText:[[NSString alloc]initWithData:messagePart.data
+                                              encoding:NSUTF8StringEncoding]];
+    }
     NSString *timestampText = @"";
     
     // If the message was sent by current user, show Receipent Status Indicators
@@ -271,10 +287,12 @@ static UIColor *LSRandomColor(void)
 }
 
 - (void)sendMessage:(NSString *)messageText{
-
+    
     // Send a Message
     // See "Quick Start - Send a Message" for more details
     // https://developer.layer.com/docs/quick-start/ios#send-a-message
+    
+    LYRMessagePart *messagePart;
     
     // If no conversations exist, create a new conversation object with a single participant
     if (!self.conversation) {
@@ -283,10 +301,21 @@ static UIColor *LSRandomColor(void)
         if (!self.conversation) {
             NSLog(@"New Conversation creation failed: %@", error);
         }
+        
+        
     }
     
-    // Creates a message part with text/plain MIME Type
-    LYRMessagePart *messagePart = [LYRMessagePart messagePartWithText:messageText];
+    //if we are sending an image
+    if (self.sendingImage) {
+        UIImage *image = self.photo; //get photo
+        NSData *imageData = UIImagePNGRepresentation(image);
+        messagePart = [LYRMessagePart messagePartWithMIMEType:MIMETypeImagePNG data:imageData];
+        self.sendingImage = NO;
+    }else
+    {
+        //Creates a message part with text/plain MIME Type
+        messagePart = [LYRMessagePart messagePartWithText:messageText];
+    }
     
     // Creates and returns a new message object with the given conversation and array of message parts
     NSString *pushMessage= [NSString stringWithFormat:@"%@ says %@",self.layerClient.authenticatedUserID ,messageText];
@@ -299,9 +328,11 @@ static UIColor *LSRandomColor(void)
         // If the message was sent by the participant, show the sentAt time and mark the message as read
         NSLog(@"Message queued to be sent: %@", messageText);
         self.inputTextView.text = @"";
+        
     } else {
         NSLog(@"Message send failed: %@", error);
     }
+    self.photo = nil;
 }
 
 #pragma - mark Set up for Shake
@@ -317,10 +348,10 @@ static UIColor *LSRandomColor(void)
     if (motion == UIEventSubtypeMotionShake) {
         UIColor *newNavBarBackgroundColor = LSRandomColor();
         self.navigationController.navigationBar.barTintColor = newNavBarBackgroundColor;
-
+        
         CGFloat redFloat = 0.0, greenFloat = 0.0, blueFloat = 0.0, alpha = 0.0;
         [newNavBarBackgroundColor getRed:&redFloat green:&greenFloat blue:&blueFloat alpha:&alpha];
-
+        
         // For more information about Metadata, check out https://developer.layer.com/docs/integration/ios#metadata
         NSDictionary *metadata = @{ LQSBackgroundColorMetadataKey : @{
                                             LQSRedBackgroundColor : [[NSNumber numberWithFloat:redFloat] stringValue],
@@ -353,7 +384,7 @@ static UIColor *LSRandomColor(void)
 {
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
-
+    
     CGRect rect = self.view.frame;
     if (movedUp) {
         if (rect.origin.y == 0) {
@@ -424,7 +455,7 @@ static UIColor *LSRandomColor(void)
 {
     [self.tableView endUpdates];
     [self scrollToBottom];
-
+    
 }
 
 #pragma mark - Layer Sync Notification Handler
@@ -455,10 +486,16 @@ static UIColor *LSRandomColor(void)
 #pragma - mark General Helper Methods
 
 -(void)scrollToBottom{
-    if(self.conversation)
+    NSUInteger messages = [self numberOfMessages];
+    
+    if(self.conversation && messages > 0)
     {
         NSIndexPath* ip = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
         [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    }else
+    {
+        //   [self sendMessageAction:@"Hello!"];
+        NSLog(@"Inerst what happens when a convo has not been started");
     }
 }
 
@@ -475,6 +512,102 @@ static UIColor *LSRandomColor(void)
                                                                            green:greenColor
                                                                             blue:blueColor
                                                                            alpha:1.0f];
+}
+
+- (IBAction)CameraButtonSelected:(UIBarButtonItem *)sender {
+    UIImagePickerController *picker = [[UIImagePickerController alloc]init];
+    picker.delegate = self;
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    }
+    else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum ])
+    {
+        picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    }
+    [self presentViewController:picker animated:YES completion:nil];
+}
+
+-(NSUInteger)numberOfMessages
+{
+    LYRQuery *message = [LYRQuery queryWithQueryableClass:[LYRMessage class]];
+    
+    NSError *error;
+    NSOrderedSet *messageList = [self.layerClient executeQuery:message error:&error];
+    
+    return messageList.count;
+}
+
+
+- (IBAction)clearButtonPressed:(UIBarButtonItem *)sender
+{
+    LYRQuery *message = [LYRQuery queryWithQueryableClass:[LYRMessage class]];
+    
+    NSError *error;
+    NSOrderedSet *messageList = [self.layerClient executeQuery:message error:&error];
+    
+    
+    
+    if ([messageList count] > 0)
+    {
+        
+        for (int i = 0; i < [messageList count];  i++)
+        {
+            LYRMessage *message = [messageList objectAtIndex:i];
+            bool success = [message delete:LYRDeletionModeAllParticipants error:&error];
+            NSLog(@"Message is: %@", message.parts);
+            
+            if (success) {
+                NSLog(@"The message has been delted");
+            }else {
+                NSLog(@"Error");
+            }
+        }
+        
+    }
+    self.photo = nil;
+    
+    
+}
+
+- (IBAction)CameraButtonPressed:(UIBarButtonItem *)sender
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc]init];
+    picker.delegate = self;
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    }
+    else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum ])
+    {
+        picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    }
+    [self presentViewController:picker animated:YES completion:nil];
+    
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    self.sendingImage = YES;
+    UIImage *image = info[UIImagePickerControllerEditedImage];
+    
+    if (!image) {
+        image = info[UIImagePickerControllerOriginalImage];
+    }
+    self.photo = image;
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    
+    self.inputTextView.text = @"Press Send to Send Selected Image!";
+    
+}
+
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    NSLog(@"Cancel");
+    [self dismissViewControllerAnimated:YES completion:nil];
+    self.sendingImage = FALSE;
 }
 
 @end
