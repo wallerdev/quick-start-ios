@@ -61,7 +61,7 @@ static UIColor *LSRandomColor(void)
                            alpha:1.0f];
 }
 
-@interface LQSViewController () <UITextViewDelegate, LYRQueryControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface LQSViewController () <UITextViewDelegate, LYRQueryControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate>
 
 @property (nonatomic) LYRConversation *conversation;
 @property (nonatomic, retain) LYRQueryController *queryController;
@@ -540,6 +540,30 @@ static UIColor *LSRandomColor(void)
 
 - (IBAction)clearButtonPressed:(UIBarButtonItem *)sender
 {
+    
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Delete messages?"
+                                                    message:@"This action will clear all your current messages. Are you sure you want to do this?"
+                                                   delegate:self
+                                          cancelButtonTitle:@"NO"
+                                          otherButtonTitles:@"Yes",nil];
+    //[alert addButtonWithTitle:@"Yes"];
+    [alert show];
+    
+    
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex ==1) {
+        [self clearMessages];
+    }
+}
+
+-(void)clearMessages
+{
+    
+    
     LYRQuery *message = [LYRQuery queryWithQueryableClass:[LYRMessage class]];
     
     NSError *error;
@@ -565,12 +589,11 @@ static UIColor *LSRandomColor(void)
         
     }
     self.photo = nil;
-    
-    
 }
 
 - (IBAction)CameraButtonPressed:(UIBarButtonItem *)sender
 {
+    self.inputTextView.text = @"";
     UIImagePickerController *picker = [[UIImagePickerController alloc]init];
     picker.delegate = self;
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
@@ -598,7 +621,7 @@ static UIColor *LSRandomColor(void)
     [self dismissViewControllerAnimated:YES completion:nil];
     
     self.messageImage.image = image;
-   // self.inputTextView.text = @"Press Send to Send Selected Image!";
+    // self.inputTextView.text = @"Press Send to Send Selected Image!";
     
 }
 
