@@ -101,6 +101,9 @@
                                             <action selector="sendMessageAction:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="HHZ-il-w69"/>
                                         </connections>
                                     </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gF8-Uq-3jH">
+                                        <rect key="frame" x="108" y="8" width="93" height="69"/>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -141,6 +144,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="inputTextView" destination="UNU-sT-1f9" id="tdL-RI-wp2"/>
+                        <outlet property="messageImage" destination="gF8-Uq-3jH" id="hKC-MF-7DR"/>
                         <outlet property="tableView" destination="9lU-Gi-eE5" id="1F5-4J-bf3"/>
                         <outlet property="typingIndicatorLabel" destination="bY0-cy-Ouk" id="0Ki-yF-fiK"/>
                     </connections>

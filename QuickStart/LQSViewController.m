@@ -293,7 +293,7 @@ static UIColor *LSRandomColor(void)
     // https://developer.layer.com/docs/quick-start/ios#send-a-message
     
     LYRMessagePart *messagePart;
-    
+    self.messageImage.image = nil;
     // If no conversations exist, create a new conversation object with a single participant
     if (!self.conversation) {
         NSError *error = nil;
@@ -597,8 +597,8 @@ static UIColor *LSRandomColor(void)
     self.photo = image;
     [self dismissViewControllerAnimated:YES completion:nil];
     
-    
-    self.inputTextView.text = @"Press Send to Send Selected Image!";
+    self.messageImage.image = image;
+   // self.inputTextView.text = @"Press Send to Send Selected Image!";
     
 }
 
