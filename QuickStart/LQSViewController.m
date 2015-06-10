@@ -492,10 +492,6 @@ static UIColor *LSRandomColor(void)
     {
         NSIndexPath* ip = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
         [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:YES];
-    }else
-    {
-        //   [self sendMessageAction:@"Hello!"];
-        NSLog(@"Inerst what happens when a convo has not been started");
     }
 }
 
@@ -596,13 +592,8 @@ static UIColor *LSRandomColor(void)
     self.inputTextView.text = @"";
     UIImagePickerController *picker = [[UIImagePickerController alloc]init];
     picker.delegate = self;
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    }
-    else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum ])
-    {
-        picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-    }
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    
     [self presentViewController:picker animated:YES completion:nil];
     
 }
