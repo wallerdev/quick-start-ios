@@ -77,7 +77,6 @@ static UIColor *LSRandomColor(void)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     [self setupLayerNotificationObservers];
     [self fetchLayerConversation];
     
@@ -89,7 +88,7 @@ static UIColor *LSRandomColor(void)
     logoImageView.contentMode = UIViewContentModeScaleAspectFit;
     self.navigationItem.titleView = logoImageView;
     self.navigationItem.hidesBackButton = YES;
-    
+    self.tableView.separatorColor = [UIColor greenColor]; 
     self.inputTextView.delegate = self;
     self.inputTextView.text = LQSInitialMessageText;
 }
@@ -192,6 +191,17 @@ static UIColor *LSRandomColor(void)
     // Return number of objects in queryController
     return [self.queryController numberOfObjectsInSection:section];
 }
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+//    
+//    LYRMessage *message = [self.queryController objectAtIndexPath:indexPath];
+//    LYRMessagePart *messagePart = message.parts[0];
+//    //If it is type image
+//    if ([messagePart.MIMEType isEqualToString:@"image/png"]) {
+//        return 140;
+//    } else {
+//        return 70;
+//    }
+//}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -205,11 +215,24 @@ static UIColor *LSRandomColor(void)
     return cell;
 }
 
+- (UIColor *)colorFromHexString:(NSString *)hexString {
+    unsigned rgbValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:hexString];
+    [scanner setScanLocation:1]; // bypass '#' character
+    [scanner scanHexInt:&rgbValue];
+    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
+}
+
 - (void)configureCell:(LQSChatMessageCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Get Message Object from queryController
     LYRMessage *message = [self.queryController objectAtIndexPath:indexPath];
     LYRMessagePart *messagePart = message.parts[0];
+    // Add line seperators
+    UIView* separatorLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 30, 520, 1)];/// change size as you need.
+    
+    separatorLineView.backgroundColor = [self colorFromHexString:@"#ededed"];// you can also put image here
+    [cell.contentView addSubview:separatorLineView];
     
     //If it is type image
     if ([messagePart.MIMEType isEqualToString:@"image/png"]) {
@@ -492,6 +515,7 @@ static UIColor *LSRandomColor(void)
     {
         NSIndexPath* ip = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
         [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:YES];
+
     }
 }
 
@@ -543,7 +567,6 @@ static UIColor *LSRandomColor(void)
                                                    delegate:self
                                           cancelButtonTitle:@"NO"
                                           otherButtonTitles:@"Yes",nil];
-    //[alert addButtonWithTitle:@"Yes"];
     [alert show];
     
     
