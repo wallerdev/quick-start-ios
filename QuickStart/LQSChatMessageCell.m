@@ -20,9 +20,10 @@
     if (self) {
         self.messageImageView = [[UIImageView alloc]init];
         self.messageImageView.tag = 1;
-        self.messageImageView.frame = CGRectMake(100, 50, 150, 90);
+        self.messageImageView.frame = CGRectMake(100, 30, 150, 90);
         [self addSubview:self.messageImageView];
     }
+
     return self;
 }
 
