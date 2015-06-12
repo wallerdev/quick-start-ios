@@ -8,16 +8,40 @@
 
 #import "LQSChatMessageCell.h"
 
+@interface LQSChatMessageCell ()
+
+@property (nonatomic) UIImageView *messageImageView;
+@end
 @implementation LQSChatMessageCell
 
-- (void)awakeFromNib {
-    // Initialization code
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        self.messageImageView = [[UIImageView alloc]init];
+        self.messageImageView.tag = 1;
+        self.messageImageView.frame = CGRectMake(100, 30, 150, 90);
+        [self addSubview:self.messageImageView];
+    }
+
+    return self;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
+- (void)updateWithImage:(UIImage *)image
+{
+    self.messageImageView.image = image;
+}
 
-    // Configure the view for the selected state
+-(void)removeImage
+{
+    if (self.messageImageView.image) {
+        self.messageImageView.image = nil;
+    }
+}
+
+-(void)assignText:(NSString *)text
+{
+    self.messageLabel.text = text;
 }
 
 @end
