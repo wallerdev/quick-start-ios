@@ -13,7 +13,7 @@
 /**
  Layer App ID from developer.layer.com
  */
-static NSString *const LQSLayerAppIDString = @"LAYER_APP_IP";
+static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
 
 #if TARGET_IPHONE_SIMULATOR
     // If on simulator set the user ID to Simulator and participant to Device
