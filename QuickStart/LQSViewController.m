@@ -488,7 +488,7 @@ static UIColor *LSRandomColor(void)
 - (void)didReceiveLayerObjectsDidChangeNotification:(NSNotification *)notification;
 {
     // For more information about Synchronization, check out https://developer.layer.com/docs/integration/ios#synchronization
-    if (!self.conversation) {
+    if (!self.conversation || [self numberOfMessages] < 2) {
         [self fetchLayerConversation];
         [self.tableView reloadData];
     }
