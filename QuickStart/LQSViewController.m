@@ -8,6 +8,7 @@
 
 #import "LQSViewController.h"
 #import "LQSChatMessageCell.h"
+#import "LQSAnnouncementsTableViewController.h"
 
 // Defined in LQSAppDelegate.m
 extern NSString *const LQSCurrentUserID;
@@ -90,6 +91,7 @@ static UIColor *LSRandomColor(void)
     self.navigationItem.hidesBackButton = YES;
     self.inputTextView.delegate = self;
     self.inputTextView.text = LQSInitialMessageText;
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -137,12 +139,21 @@ static UIColor *LSRandomColor(void)
     // For more information about Querying, check out https://developer.layer.com/docs/integration/ios#querying
     
     LYRQuery *query = [LYRQuery queryWithQueryableClass:[LYRConversation class]];
-    
     query.predicate = [LYRPredicate predicateWithProperty:@"participants" predicateOperator:LYRPredicateOperatorIsEqualTo value:@[ LQSCurrentUserID, LQSParticipantUserID, LQSParticipant2UserID ]];
     query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO] ];
     
     NSError *error;
     NSOrderedSet *conversations = [self.layerClient executeQuery:query error:&error];
+    
+    if (conversations.count <= 0) {
+        NSError *conv_error = nil;
+        self.conversation = [self.layerClient newConversationWithParticipants:[NSSet setWithArray:@[ LQSParticipantUserID, LQSParticipant2UserID  ]] options:nil error:&conv_error];
+        if (!self.conversation) {
+            NSLog(@"New Conversation creation failed: %@", conv_error);
+        }
+        conversations = [self.layerClient executeQuery:query error:&error]; 
+    }
+    
     if (!error) {
         NSLog(@"%tu conversations with participants %@", conversations.count, @[ LQSCurrentUserID, LQSParticipantUserID, LQSParticipant2UserID ]);
     } else {
@@ -178,17 +189,23 @@ static UIColor *LSRandomColor(void)
     } else {
         NSLog(@"Query failed with error: %@", error);
     }
-    
-    // Mark all conversations as read on launch
+    [self.tableView reloadData];
     [self.conversation markAllMessagesAsRead:nil];
 }
 
 #pragma - mark Table View Data Source Methods
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return number of objects in queryController
-    return [self.queryController numberOfObjectsInSection:section];
+    NSInteger rows = [self.queryController numberOfObjectsInSection:0];
+    NSLog(@"Rows %ld", (long)rows);
+    return rows;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -236,7 +253,8 @@ static UIColor *LSRandomColor(void)
     }
     NSString *timestampText = @"";
     
-    // If the message was sent by current user, show Receipent Status Indicators
+    
+    // If the message was sent by current user, show Receipent Status Indicator
     if ([message.sender.userID isEqualToString:LQSCurrentUserID]) {
         switch ([message recipientStatusForUserID:LQSParticipantUserID]) {
             case LYRRecipientStatusSent:
@@ -266,7 +284,11 @@ static UIColor *LSRandomColor(void)
         timestampText = [NSString stringWithFormat:@"Received: %@",[LQSDateFormatter() stringFromDate:message.sentAt]];
     }
     
-    cell.deviceLabel.text = [NSString stringWithFormat:@"%@ @ %@", message.sender.userID, timestampText];
+    if (message.sender.userID != Nil) {
+        cell.deviceLabel.text = [NSString stringWithFormat:@"%@ @ %@", message.sender.userID, timestampText];
+    }else {
+        cell.deviceLabel.text = [NSString stringWithFormat:@"Platform @ %@",timestampText];
+    }
 }
 
 #pragma mark - Receiving Typing Indicator
@@ -309,13 +331,7 @@ static UIColor *LSRandomColor(void)
     self.messageImage.image = nil;
     // If no conversations exist, create a new conversation object with a single participant
     if (!self.conversation) {
-        NSError *error = nil;
-        self.conversation = [self.layerClient newConversationWithParticipants:[NSSet setWithArray:@[ LQSParticipantUserID, LQSParticipant2UserID  ]] options:nil error:&error];
-        if (!self.conversation) {
-            NSLog(@"New Conversation creation failed: %@", error);
-        }
-        
-        
+        [self fetchLayerConversation];
     }
     
     //if we are sending an image
@@ -346,6 +362,9 @@ static UIColor *LSRandomColor(void)
         NSLog(@"Message send failed: %@", error);
     }
     self.photo = nil;
+    if (!self.queryController) {
+       [self setupQueryController];
+    }
 }
 
 #pragma - mark Set up for Shake
@@ -487,11 +506,6 @@ static UIColor *LSRandomColor(void)
 
 - (void)didReceiveLayerObjectsDidChangeNotification:(NSNotification *)notification;
 {
-    // For more information about Synchronization, check out https://developer.layer.com/docs/integration/ios#synchronization
-    if (!self.conversation || [self numberOfMessages] < 2) {
-        [self fetchLayerConversation];
-        [self.tableView reloadData];
-    }
     // Get nav bar colors from conversation metadata
     [self setNavbarColorFromConversationMetadata:self.conversation.metadata];
 }
@@ -551,7 +565,6 @@ static UIColor *LSRandomColor(void)
 - (IBAction)clearButtonPressed:(UIBarButtonItem *)sender
 {
     
-    
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Delete messages?"
                                                     message:@"This action will clear all your current messages. Are you sure you want to do this?"
                                                    delegate:self
@@ -600,16 +613,15 @@ static UIColor *LSRandomColor(void)
     self.photo = nil;
 }
 
-- (IBAction)CameraButtonPressed:(UIBarButtonItem *)sender
-{
+- (IBAction)CameraButtonPressed:(UIButton *)sender {
     self.inputTextView.text = @"";
     UIImagePickerController *picker = [[UIImagePickerController alloc]init];
     picker.delegate = self;
     picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     
     [self presentViewController:picker animated:YES completion:nil];
-    
 }
+
 
 #pragma mark - UIImagePickerControllerDelegate
 
@@ -625,7 +637,6 @@ static UIColor *LSRandomColor(void)
     [self dismissViewControllerAnimated:YES completion:nil];
     
     self.messageImage.image = image;
-    // self.inputTextView.text = @"Press Send to Send Selected Image!";
     
 }
 
@@ -635,6 +646,18 @@ static UIColor *LSRandomColor(void)
     NSLog(@"Cancel");
     [self dismissViewControllerAnimated:YES completion:nil];
     self.sendingImage = FALSE;
+}
+
+#pragma mark - Segue method
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([sender isKindOfClass:[UIButton class]]) {
+        if ([segue.destinationViewController isKindOfClass:[LQSAnnouncementsTableViewController class]]) {
+            LQSAnnouncementsTableViewController *anncementsController = segue.destinationViewController;
+            anncementsController.layerClient = self.layerClient;
+        }
+    }
 }
 
 @end

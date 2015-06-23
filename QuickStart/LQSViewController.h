@@ -17,10 +17,13 @@
 @property (nonatomic, retain) IBOutlet UITextView *inputTextView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet UILabel *typingIndicatorLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *messageImage;
 
 - (IBAction)clearButtonPressed:(UIBarButtonItem *)sender;
-- (IBAction)CameraButtonPressed:(UIBarButtonItem *)sender;
-@property (strong, nonatomic) IBOutlet UIImageView *messageImage;
+//- (IBAction)CameraButtonPressed1:(UIBarButtonItem *)sender;
+- (IBAction)ShowAnnouncements:(UIButton *)sender;
+- (IBAction)CameraButtonPressed:(UIButton *)sender;
+
 
 
 

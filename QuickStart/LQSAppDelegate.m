@@ -17,7 +17,7 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
 
 #if TARGET_IPHONE_SIMULATOR
     // If on simulator set the user ID to Simulator and participant to Device
-    NSString *const LQSCurrentUserID = @"Simulator";
+    NSString *const LQSCurrentUserID = @"Simulator4324324";
     NSString *const LQSParticipantUserID = @"Device";
     NSString *const LQSInitialMessageText = @"Hey Device! This is your friend, Simulator.";
 #else
