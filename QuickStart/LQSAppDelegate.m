@@ -22,7 +22,7 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
     NSString *const LQSInitialMessageText = @"Hey Device! This is your friend, Simulator.";
 #else
     // If on device set the user ID to Device and participant to Simulator
-    NSString *const LQSCurrentUserID = @"Device1";
+    NSString *const LQSCurrentUserID = @"Device";
     NSString *const LQSParticipantUserID = @"Simulator";
     NSString *const LQSInitialMessageText =  @"Hey Simulator! This is your friend, Device.";
 #endif
