@@ -14,17 +14,6 @@
 
 @implementation LQSAnnouncementsTableViewCell
 
-- (void)awakeFromNib
-{
-    // Initialization code
-}
-
--(id)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [super initWithCoder:aDecoder];
-    return self;
-}
-
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];

@@ -142,8 +142,18 @@ static UIColor *LSRandomColor(void)
     query.predicate = [LYRPredicate predicateWithProperty:@"participants" predicateOperator:LYRPredicateOperatorIsEqualTo value:@[ LQSCurrentUserID, LQSParticipantUserID, LQSParticipant2UserID ]];
     query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO] ];
     
+    
+    
     NSError *error;
     NSOrderedSet *conversations = [self.layerClient executeQuery:query error:&error];
+    
+    if (conversations.count <= 0) {
+        NSError *conv_error = nil;
+        self.conversation = [self.layerClient newConversationWithParticipants:[NSSet setWithArray:@[ LQSParticipantUserID, LQSParticipant2UserID  ]] options:nil error:&conv_error];
+        if (!self.conversation) {
+            NSLog(@"New Conversation creation failed: %@", conv_error);
+        }
+    }
     
     if (!error) {
         NSLog(@"%tu conversations with participants %@", conversations.count, @[ LQSCurrentUserID, LQSParticipantUserID, LQSParticipant2UserID ]);
@@ -195,7 +205,6 @@ static UIColor *LSRandomColor(void)
 {
     // Return number of objects in queryController
     NSInteger rows = [self.queryController numberOfObjectsInSection:0];
-    NSLog(@"Rows %ld", (long)rows);
     return rows;
 }
 
@@ -210,7 +219,7 @@ static UIColor *LSRandomColor(void)
     } else {
         return 70;
     }
-
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -322,12 +331,7 @@ static UIColor *LSRandomColor(void)
     self.messageImage.image = nil;
     // If no conversations exist, create a new conversation object with a single participant
     if (!self.conversation) {
-        //[self fetchLayerConversation];
-        NSError *conv_error = nil;
-        self.conversation = [self.layerClient newConversationWithParticipants:[NSSet setWithArray:@[ LQSParticipantUserID, LQSParticipant2UserID  ]] options:nil error:&conv_error];
-        if (!self.conversation) {
-            NSLog(@"New Conversation creation failed: %@", conv_error);
-        }
+        [self fetchLayerConversation];
     }
     
     //if we are sending an image
@@ -359,7 +363,7 @@ static UIColor *LSRandomColor(void)
     }
     self.photo = nil;
     if (!self.queryController) {
-       [self setupQueryController];
+        [self setupQueryController];
     }
 }
 
@@ -514,8 +518,8 @@ static UIColor *LSRandomColor(void)
     if(self.conversation && messages > 0)
     {
         NSIndexPath* ip = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
-        [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:YES];
-
+         [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        
     }
 }
 

@@ -61,7 +61,7 @@
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    NSURL *ourURL = [[NSURL alloc]initWithString:@"https://developer.layer.com/docs/platform#send-an-announcement"];
+    NSURL *ourURL = [[NSURL alloc]initWithString:@"http://bit.ly/layer-announcements"];
     if (buttonIndex ==1) {
         [[UIApplication sharedApplication] openURL:ourURL];
     }

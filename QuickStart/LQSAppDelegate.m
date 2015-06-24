@@ -22,7 +22,7 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
     NSString *const LQSInitialMessageText = @"Hey Device! This is your friend, Simulator.";
 #else
     // If on device set the user ID to Device and participant to Simulator
-    NSString *const LQSCurrentUserID = @"Device";
+    NSString *const LQSCurrentUserID = @"Device1";
     NSString *const LQSParticipantUserID = @"Simulator";
     NSString *const LQSInitialMessageText =  @"Hey Simulator! This is your friend, Device.";
 #endif
@@ -146,9 +146,14 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
 - (LYRMessage *)messageFromRemoteNotification:(NSDictionary *)remoteNotification
 {
     static NSString *const LQSPushMessageIdentifierKeyPath = @"layer.message_identifier";
-    
+    static NSString *const LQSPushAnnouncementIdentifierKeyPath = @"layer.announcement_identifier";
+
     // Retrieve message URL from Push Notification
     NSURL *messageURL = [NSURL URLWithString:[remoteNotification valueForKeyPath:LQSPushMessageIdentifierKeyPath]];
+    
+    if (!messageURL) {
+        messageURL = [NSURL URLWithString:[remoteNotification valueForKeyPath:LQSPushAnnouncementIdentifierKeyPath]];
+    }
     
     // Retrieve LYRMessage from Message URL
     LYRQuery *query = [LYRQuery queryWithQueryableClass:[LYRMessage class]];
