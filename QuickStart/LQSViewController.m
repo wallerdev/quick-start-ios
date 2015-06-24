@@ -142,8 +142,6 @@ static UIColor *LSRandomColor(void)
     query.predicate = [LYRPredicate predicateWithProperty:@"participants" predicateOperator:LYRPredicateOperatorIsEqualTo value:@[ LQSCurrentUserID, LQSParticipantUserID, LQSParticipant2UserID ]];
     query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO] ];
     
-    
-    
     NSError *error;
     NSOrderedSet *conversations = [self.layerClient executeQuery:query error:&error];
     
@@ -223,7 +221,6 @@ static UIColor *LSRandomColor(void)
     } else {
         return 70;
     }
-    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -523,7 +520,7 @@ static UIColor *LSRandomColor(void)
     if(self.conversation && messages > 0)
     {
         NSIndexPath* ip = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
-//         [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:YES];
         
     }
 }
