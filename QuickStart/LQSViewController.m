@@ -165,8 +165,12 @@ static UIColor *LSRandomColor(void)
     if (conversations.count) {
         self.conversation = [conversations lastObject];
         NSLog(@"Get last conversation object: %@",self.conversation.identifier);
+        //[self.conversation delete:LYRDeletionModeAllParticipants error:nil];
+        
         // setup query controller with messages from last conversation
-        [self setupQueryController];
+        if (!self.queryController) {
+            [self setupQueryController];
+        }
     }
 }
 
@@ -508,6 +512,7 @@ static UIColor *LSRandomColor(void)
 {
     // Get nav bar colors from conversation metadata
     [self setNavbarColorFromConversationMetadata:self.conversation.metadata];
+    [self fetchLayerConversation];
 }
 
 #pragma - mark General Helper Methods
@@ -518,7 +523,7 @@ static UIColor *LSRandomColor(void)
     if(self.conversation && messages > 0)
     {
         NSIndexPath* ip = [NSIndexPath indexPathForRow:[self.tableView numberOfRowsInSection:0] - 1 inSection:0];
-         [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:YES];
+//         [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:YES];
         
     }
 }
