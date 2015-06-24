@@ -145,15 +145,6 @@ static UIColor *LSRandomColor(void)
     NSError *error;
     NSOrderedSet *conversations = [self.layerClient executeQuery:query error:&error];
     
-    if (conversations.count <= 0) {
-        NSError *conv_error = nil;
-        self.conversation = [self.layerClient newConversationWithParticipants:[NSSet setWithArray:@[ LQSParticipantUserID, LQSParticipant2UserID  ]] options:nil error:&conv_error];
-        if (!self.conversation) {
-            NSLog(@"New Conversation creation failed: %@", conv_error);
-        }
-        conversations = [self.layerClient executeQuery:query error:&error]; 
-    }
-    
     if (!error) {
         NSLog(@"%tu conversations with participants %@", conversations.count, @[ LQSCurrentUserID, LQSParticipantUserID, LQSParticipant2UserID ]);
     } else {
@@ -331,7 +322,12 @@ static UIColor *LSRandomColor(void)
     self.messageImage.image = nil;
     // If no conversations exist, create a new conversation object with a single participant
     if (!self.conversation) {
-        [self fetchLayerConversation];
+        //[self fetchLayerConversation];
+        NSError *conv_error = nil;
+        self.conversation = [self.layerClient newConversationWithParticipants:[NSSet setWithArray:@[ LQSParticipantUserID, LQSParticipant2UserID  ]] options:nil error:&conv_error];
+        if (!self.conversation) {
+            NSLog(@"New Conversation creation failed: %@", conv_error);
+        }
     }
     
     //if we are sending an image
