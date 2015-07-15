@@ -48,8 +48,8 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
         [self showFirstTimeMessage];
 
         // Initializes a LYRClient object
-        NSURL *url = [NSURL URLWithString:LQSLayerAppIDString];
-        self.layerClient = [LYRClient clientWithAppID:url];
+        NSURL *appID = [NSURL URLWithString:LQSLayerAppIDString];
+        self.layerClient = [LYRClient clientWithAppID:appID];
         self.layerClient.delegate = self;
         self.layerClient.autodownloadMIMETypes = [NSSet setWithObjects:@"image/png", nil];
         // Connect to Layer

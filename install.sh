@@ -40,7 +40,7 @@ echo "QuickStart has been installed in your home directory (~/Downloads/quick-st
 
 if [[ "$1" =~ [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12} ]]; then
 	echo "2. Injecting App ID: $1 in the project"	
-	sed -i '' -e "s/LQSLayerAppIDString \= \@\"LAYER_APP_ID\"/LQSLayerAppIDString = \@\"$1\"/" $INSTALL_DIR/QuickStart/LQSAppDelegate.m
+	sed -i '' -e "s#LQSLayerAppIDString \= \@\"LAYER_APP_ID\"#LQSLayerAppIDString = \@\"$1\"#" $INSTALL_DIR/QuickStart/LQSAppDelegate.m
 else
 	echo "2: Skipping Step - No Valid App ID provided."	
 fi
