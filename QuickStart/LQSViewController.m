@@ -612,7 +612,6 @@ static UIColor *LSRandomColor(void)
         }
         
     }
-    self.photo = nil;
 }
 
 - (IBAction)CameraButtonPressed:(UIButton *)sender {

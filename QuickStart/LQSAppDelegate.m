@@ -48,8 +48,8 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
         [self showFirstTimeMessage];
 
         // Initializes a LYRClient object
-        NSUUID *appID = [[NSUUID alloc] initWithUUIDString:LQSLayerAppIDString];
-        self.layerClient = [LYRClient clientWithAppID:appID];
+        NSURL *url = [NSURL URLWithString:LQSLayerAppIDString];
+        self.layerClient = [LYRClient clientWithAppID:url];
         self.layerClient.delegate = self;
         self.layerClient.autodownloadMIMETypes = [NSSet setWithObjects:@"image/png", nil];
         // Connect to Layer
@@ -201,7 +201,7 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
         /*
          * 2. Acquire identity Token from Layer Identity Service
          */
-        [self requestIdentityTokenForUserID:userID appID:[self.layerClient.appID UUIDString] nonce:nonce completion:^(NSString *identityToken, NSError *error) {
+        [self requestIdentityTokenForUserID:userID appID:[self.layerClient.appID absoluteString] nonce:nonce completion:^(NSString *identityToken, NSError *error) {
             if (!identityToken) {
                 if (completion) {
                     completion(NO, error);

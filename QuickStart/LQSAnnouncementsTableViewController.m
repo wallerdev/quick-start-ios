@@ -35,6 +35,7 @@
     _queryController.delegate = self;
     [_queryController execute:&error];
     
+    //if there are no announcements,show an alert
     if (self.queryController.count <= 0) {
         
         UIView *empty_view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
@@ -83,9 +84,10 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return _queryController.count;
+    return self.queryController.count;
 }
 
+//If an announcements is unread and selected, then we mark the announcment as "read"
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     LYRAnnouncement *announcement = [_queryController objectAtIndexPath:indexPath];
@@ -93,6 +95,7 @@
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+//display announcements on tableview
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     

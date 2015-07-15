@@ -20,7 +20,6 @@
 @property (strong, nonatomic) IBOutlet UIImageView *messageImage;
 
 - (IBAction)clearButtonPressed:(UIBarButtonItem *)sender;
-//- (IBAction)CameraButtonPressed1:(UIBarButtonItem *)sender;
 - (IBAction)ShowAnnouncements:(UIButton *)sender;
 - (IBAction)CameraButtonPressed:(UIButton *)sender;
 
