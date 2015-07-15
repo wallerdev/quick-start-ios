@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7872814A1B38C79E00A9AE5F /* LQSAnnouncementsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 787281491B38C79E00A9AE5F /* LQSAnnouncementsTableViewCell.m */; };
+		78DE71951B3387BD002E3197 /* LQSAnnouncementsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78DE71941B3387BD002E3197 /* LQSAnnouncementsTableViewController.m */; };
+		78DE71971B34A994002E3197 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78DE71961B34A994002E3197 /* Main.storyboard */; };
 		882727831A3F8F1100E63770 /* LQSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 882727821A3F8F1100E63770 /* LQSAppDelegate.m */; };
 		884A72D11A302EE00069F62C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 884A72D01A302EE00069F62C /* main.m */; };
 		884A72D71A302EE00069F62C /* LQSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 884A72D61A302EE00069F62C /* LQSViewController.m */; };
-		884A72DA1A302EE00069F62C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 884A72D81A302EE00069F62C /* Main.storyboard */; };
 		884A72DC1A302EE00069F62C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 884A72DB1A302EE00069F62C /* Images.xcassets */; };
 		884A72EB1A302EE00069F62C /* QuickStartTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 884A72EA1A302EE00069F62C /* QuickStartTests.m */; };
 		884A72F91A302F440069F62C /* LQSChatMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 884A72F81A302F440069F62C /* LQSChatMessageCell.m */; };
@@ -30,6 +32,11 @@
 /* Begin PBXFileReference section */
 		557830992B049729272A99B2 /* Pods-QuickStart.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuickStart.release.xcconfig"; path = "Pods/Target Support Files/Pods-QuickStart/Pods-QuickStart.release.xcconfig"; sourceTree = "<group>"; };
 		6CC611513A36DC3FAA3D3503 /* libPods-QuickStart.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-QuickStart.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		787281481B38C79E00A9AE5F /* LQSAnnouncementsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LQSAnnouncementsTableViewCell.h; sourceTree = "<group>"; };
+		787281491B38C79E00A9AE5F /* LQSAnnouncementsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LQSAnnouncementsTableViewCell.m; sourceTree = "<group>"; };
+		78DE71931B3387BD002E3197 /* LQSAnnouncementsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LQSAnnouncementsTableViewController.h; sourceTree = "<group>"; };
+		78DE71941B3387BD002E3197 /* LQSAnnouncementsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LQSAnnouncementsTableViewController.m; sourceTree = "<group>"; };
+		78DE71961B34A994002E3197 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		882727811A3F8F1100E63770 /* LQSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LQSAppDelegate.h; sourceTree = "<group>"; };
 		882727821A3F8F1100E63770 /* LQSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LQSAppDelegate.m; sourceTree = "<group>"; };
 		884A72CB1A302EE00069F62C /* QuickStart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickStart.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,7 +44,6 @@
 		884A72D01A302EE00069F62C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = main.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		884A72D51A302EE00069F62C /* LQSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = LQSViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		884A72D61A302EE00069F62C /* LQSViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = LQSViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		884A72D91A302EE00069F62C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		884A72DB1A302EE00069F62C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		884A72E41A302EE00069F62C /* QuickStartTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuickStartTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		884A72E91A302EE00069F62C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -115,6 +121,7 @@
 		88E81FAC1A38C4EB0076423B /* Code */ = {
 			isa = PBXGroup;
 			children = (
+				78DE71961B34A994002E3197 /* Main.storyboard */,
 				88E81FB01A38C5F20076423B /* Views */,
 				88E81FAE1A38C59C0076423B /* Controllers */,
 				884A72D01A302EE00069F62C /* main.m */,
@@ -141,6 +148,8 @@
 			children = (
 				884A72D51A302EE00069F62C /* LQSViewController.h */,
 				884A72D61A302EE00069F62C /* LQSViewController.m */,
+				78DE71931B3387BD002E3197 /* LQSAnnouncementsTableViewController.h */,
+				78DE71941B3387BD002E3197 /* LQSAnnouncementsTableViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -148,9 +157,10 @@
 		88E81FB01A38C5F20076423B /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				884A72D81A302EE00069F62C /* Main.storyboard */,
 				884A72F71A302F440069F62C /* LQSChatMessageCell.h */,
 				884A72F81A302F440069F62C /* LQSChatMessageCell.m */,
+				787281481B38C79E00A9AE5F /* LQSAnnouncementsTableViewCell.h */,
+				787281491B38C79E00A9AE5F /* LQSAnnouncementsTableViewCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -215,6 +225,7 @@
 				TargetAttributes = {
 					884A72CA1A302EE00069F62C = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = 877K56WZ9X;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -252,8 +263,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				884A72DA1A302EE00069F62C /* Main.storyboard in Resources */,
 				884A72DC1A302EE00069F62C /* Images.xcassets in Resources */,
+				78DE71971B34A994002E3197 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,6 +317,8 @@
 			files = (
 				884A72F91A302F440069F62C /* LQSChatMessageCell.m in Sources */,
 				884A72D71A302EE00069F62C /* LQSViewController.m in Sources */,
+				78DE71951B3387BD002E3197 /* LQSAnnouncementsTableViewController.m in Sources */,
+				7872814A1B38C79E00A9AE5F /* LQSAnnouncementsTableViewCell.m in Sources */,
 				882727831A3F8F1100E63770 /* LQSAppDelegate.m in Sources */,
 				884A72D11A302EE00069F62C /* main.m in Sources */,
 			);
@@ -328,17 +341,6 @@
 			targetProxy = 884A72E51A302EE00069F62C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		884A72D81A302EE00069F62C /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				884A72D91A302EE00069F62C /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		884A72EC1A302EE00069F62C /* Debug */ = {
@@ -433,7 +435,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "295179fe-779b-43dd-b02e-86a4900cdddb";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -449,7 +451,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "295179fe-779b-43dd-b02e-86a4900cdddb";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
