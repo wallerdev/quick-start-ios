@@ -17,9 +17,9 @@
 echo "Welcome to the Layer Quick Start install script for iOS"
 echo "This script will:"
 echo "1. Download the latest Quick Start project"
-echo "2. Inject your app id"
+echo "2. Inject your app id (if provided)"
 echo "3. Grab the latest LayerKit (via cocoapods)"
-echo "4. Launch XCode"
+echo "4. Launch Xcode"
 
 # Check to see if the script is running on OS X
 
@@ -34,7 +34,7 @@ mkdir -p "$INSTALL_DIR"
 
 # Download the latest Quick Start project from Github
 curl -sSL https://github.com/layerhq/quick-start-ios/archive/master.tar.gz | tar -zx -C $HOME/Downloads
-echo "QuickStart has been installed in your home directory (~/Downloads/quick-start-ios-master)."
+echo "QuickStart has been installed in ~/Downloads/quick-start-ios-master."
 
 # Update the generic XCode project with your App ID
 
