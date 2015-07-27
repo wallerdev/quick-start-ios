@@ -11,10 +11,11 @@ The Quick Start application requires Xcode and the iOS SDK v8.0. Dependencies ar
 ## Usage
 
 1. Clone the project from Github: `$ git clone https://github.com/layerhq/quick-start-ios.git`
-2. Install the dependencies via CocoaPods: `$ pod install`
-3. Open `QuickStart.xcworkspace` in Xcode.
-4. Replace LAYER_APP_ID in LQSAppDelegate.m (line 16) with your App ID from the developer dashboard (http://developer.layer.com) under the "Keys" section.  If you skip this step you will get an error on app launch.
-5. Build and run the Quick Start application on a Simulator and a physical Device to start a 1:1 conversation between them.
+2. `$ cd quick-start-ios`
+3. Install the dependencies via CocoaPods: `$ pod install`
+4. Open `QuickStart.xcworkspace` in Xcode.
+5. Replace `LAYER_APP_ID` in LQSAppDelegate.m (line 16) with your App ID from the developer dashboard (http://developer.layer.com) under the "Keys" section.  If you skip this step you will get an error on app launch.
+6. Build and run the Quick Start application on a Simulator and a physical Device to start a 1:1 conversation between them.
 
 ![Quick-Start gif](Assets/quick-start-preview.gif)
 
@@ -23,8 +24,8 @@ NOTE: If you shake the Device the navbar color will change on both the Simulator
 
 ## Highlights
 
-* Demonstrates how to implement authentication, query controller, typing indicators and metadata
-* Provides a reference implementation for driving Message UI's via an `LYRQueryController`
+* Demonstrates how to implement [authentication](https://developer.layer.com/docs/ios/integration#authentication), [querying](https://developer.layer.com/docs/ios/integration#querying), [typing indicators](https://developer.layer.com/docs/ios/integration#typing-indicator) and [metadata](https://developer.layer.com/docs/ios/integration#metadata) with Layer
+* Provides a reference implementation for driving Message UIs via `LYRQueryController`
 
 ## Configuration
 
