@@ -294,7 +294,7 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
 
 - (void)layerClient:(LYRClient *)client didFinishSynchronizationWithChanges:(NSArray *)changes
 {
-    NSLog(@"Layer Client did finish sychronization");
+    NSLog(@"Layer Client did finish synchronization");
 }
 
 - (void)layerClient:(LYRClient *)client didFailSynchronizationWithError:(NSError *)error
