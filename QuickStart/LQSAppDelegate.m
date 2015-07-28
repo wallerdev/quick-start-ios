@@ -82,7 +82,7 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
 {
     // Set up push notifications
     // For more information about Push, check out:
-    // https://developer.layer.com/docs/guides/ios#push-notification
+    // https://developer.layer.com/docs/ios/guides#push-notification
     
     // Checking if app is running iOS 8
     if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
@@ -100,7 +100,7 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
 {
     // Send device token to Layer so Layer can send pushes to this device.
     // For more information about Push, check out:
-    // https://developer.layer.com/docs/guides/ios#push-notification
+    // https://developer.layer.com/docs/ios/guides#push-notification
     NSError *error;
     BOOL success = [self.layerClient updateRemoteNotificationDeviceToken:deviceToken error:&error];
     if (success) {
@@ -294,7 +294,7 @@ static NSString *const LQSLayerAppIDString = @"LAYER_APP_ID";
 
 - (void)layerClient:(LYRClient *)client didFinishSynchronizationWithChanges:(NSArray *)changes
 {
-    NSLog(@"Layer Client did finish sychronization");
+    NSLog(@"Layer Client did finish synchronization");
 }
 
 - (void)layerClient:(LYRClient *)client didFailSynchronizationWithError:(NSError *)error
