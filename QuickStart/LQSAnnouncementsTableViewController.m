@@ -174,17 +174,6 @@
 - (void)queryControllerDidChangeContent:(LYRQueryController *)queryController
 {
     [self.tableView endUpdates];
-    if (self.shouldScrollAfterUpdates) {
-        [self scrollToTopAnimated:YES];
-    }
 }
-
-- (void)scrollToTopAnimated:(BOOL)animated
-{
-    if (self.queryController.count) {
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:animated];
-    }
-}
-
 
 @end
