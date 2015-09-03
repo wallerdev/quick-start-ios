@@ -182,18 +182,23 @@ static UIColor *LSRandomColor(void)
     query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:YES]];
     
     // Set up query controller
-    self.queryController = [self.layerClient queryControllerWithQuery:query];
-    self.queryController.delegate = self;
-    
-    NSError *error;
-    BOOL success = [self.queryController execute:&error];
-    if (success) {
-        NSLog(@"Query fetched %tu message objects", [self.queryController numberOfObjectsInSection:0]);
+    NSError *queryControllerInitError;
+    self.queryController = [self.layerClient queryControllerWithQuery:query error:&queryControllerInitError];
+    if (queryControllerInitError == nil) {
+        self.queryController.delegate = self;
+        
+        NSError *queryControllerExecuteError;
+        BOOL success = [self.queryController execute:&queryControllerExecuteError];
+        if (success) {
+            NSLog(@"Query fetched %tu message objects", [self.queryController numberOfObjectsInSection:0]);
+        } else {
+            NSLog(@"Query failed with error: %@", queryControllerExecuteError);
+        }
+        [self.tableView reloadData];
+        [self.conversation markAllMessagesAsRead:nil];
     } else {
-        NSLog(@"Query failed with error: %@", error);
+        NSLog(@"Query Controller initialization failed with error: %@", queryControllerInitError);
     }
-    [self.tableView reloadData];
-    [self.conversation markAllMessagesAsRead:nil];
 }
 
 #pragma - mark Table View Data Source Methods

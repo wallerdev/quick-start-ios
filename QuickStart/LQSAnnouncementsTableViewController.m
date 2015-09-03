@@ -27,36 +27,48 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSError *error = nil;
+    // Set up query controller
+    NSError *queryControllerInitError;
     LYRQuery *query = [LYRQuery queryWithQueryableClass:[LYRAnnouncement class]];
     query.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"position" ascending:NO]];
     
-    _queryController = [self.layerClient queryControllerWithQuery:query];
-    _queryController.delegate = self;
-    [_queryController execute:&error];
-    
-    //if there are no announcements,show an alert
-    if (self.queryController.count <= 0) {
+    // Set up query controller
+    self.queryController = [self.layerClient queryControllerWithQuery:query error:&queryControllerInitError];
+    if (queryControllerInitError == nil) {
+        _queryController.delegate = self;
         
-        UIView *empty_view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-        empty_view.backgroundColor = [UIColor whiteColor];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Announcements"
-                                                        message:@"You currently have no announcements. Would you like to learn about announcements?"
-                                                       delegate:self
-                                              cancelButtonTitle:@"NO"
-                                              otherButtonTitles:@"Yes",nil];
-        [alert show];
-        
-
-        UILabel *label = [[UILabel alloc]initWithFrame: CGRectMake(10, 50, 500, 500)];
-        [label setFont:[UIFont fontWithName:@"Helvetica Neue" size:17]];
-        label.lineBreakMode = NSLineBreakByWordWrapping;
-        label.numberOfLines = 0;
-        label.text = @"You currently have no announcements!";
-
-        [empty_view addSubview:label];
-        self.view = empty_view;
-    
+        NSError *queryControllerExecuteError;
+        BOOL success = [_queryController execute:&queryControllerExecuteError];
+        if (success) {
+            NSLog(@"Announcements Query fetched %tu announcement objects", [_queryController numberOfObjectsInSection:0]);
+            //if there are no announcements,show an alert
+            if (self.queryController.count <= 0) {
+                
+                UIView *empty_view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+                empty_view.backgroundColor = [UIColor whiteColor];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Announcements"
+                                                                message:@"You currently have no announcements. Would you like to learn about announcements?"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"NO"
+                                                      otherButtonTitles:@"Yes",nil];
+                [alert show];
+                
+                
+                UILabel *label = [[UILabel alloc]initWithFrame: CGRectMake(10, 50, 500, 500)];
+                [label setFont:[UIFont fontWithName:@"Helvetica Neue" size:17]];
+                label.lineBreakMode = NSLineBreakByWordWrapping;
+                label.numberOfLines = 0;
+                label.text = @"You currently have no announcements!";
+                
+                [empty_view addSubview:label];
+                self.view = empty_view;
+                
+            }
+        } else {
+            NSLog(@"Announcements Query failed with error: %@", queryControllerExecuteError);
+        }
+    } else {
+        NSLog(@"Announcements Query Controller initialization failed with error: %@", queryControllerInitError);
     }
 }
 
@@ -163,14 +175,14 @@
 {
     [self.tableView endUpdates];
     if (self.shouldScrollAfterUpdates) {
-        [self scrollToBottomAnimated:YES];
+        [self scrollToTopAnimated:YES];
     }
 }
 
-- (void)scrollToBottomAnimated:(BOOL)animated
+- (void)scrollToTopAnimated:(BOOL)animated
 {
     if (self.queryController.count) {
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.queryController.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:animated];
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:animated];
     }
 }
 
