@@ -225,7 +225,7 @@
 				TargetAttributes = {
 					884A72CA1A302EE00069F62C = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 877K56WZ9X;
+						DevelopmentTeam = U46UP347QQ;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -363,6 +363,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Abir Majumdar (76A3K77WGT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Abir Majumdar (76A3K77WGT)";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -407,6 +408,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Abir Majumdar (76A3K77WGT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Abir Majumdar (76A3K77WGT)";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
