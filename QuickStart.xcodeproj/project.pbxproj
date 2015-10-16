@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B557588F3D371FAA4E0729C /* Pods_QuickStart.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19D372EB9DFF603E7EA15E07 /* Pods_QuickStart.framework */; };
 		7872814A1B38C79E00A9AE5F /* LQSAnnouncementsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 787281491B38C79E00A9AE5F /* LQSAnnouncementsTableViewCell.m */; };
 		78DE71951B3387BD002E3197 /* LQSAnnouncementsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78DE71941B3387BD002E3197 /* LQSAnnouncementsTableViewController.m */; };
 		78DE71971B34A994002E3197 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78DE71961B34A994002E3197 /* Main.storyboard */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		19D372EB9DFF603E7EA15E07 /* Pods_QuickStart.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuickStart.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		557830992B049729272A99B2 /* Pods-QuickStart.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuickStart.release.xcconfig"; path = "Pods/Target Support Files/Pods-QuickStart/Pods-QuickStart.release.xcconfig"; sourceTree = "<group>"; };
 		6CC611513A36DC3FAA3D3503 /* libPods-QuickStart.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-QuickStart.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		787281481B38C79E00A9AE5F /* LQSAnnouncementsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LQSAnnouncementsTableViewCell.h; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96852B4A094C4E1444E747C4 /* libPods-QuickStart.a in Frameworks */,
+				1B557588F3D371FAA4E0729C /* Pods_QuickStart.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,6 +75,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1C71D44EFA55A193ED982857 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				19D372EB9DFF603E7EA15E07 /* Pods_QuickStart.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		54AEB8C6931E1B86DD2F7E5C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +100,7 @@
 				88E81FAD1A38C5490076423B /* Resources */,
 				884A72E71A302EE00069F62C /* QuickStartTests */,
 				54AEB8C6931E1B86DD2F7E5C /* Pods */,
+				1C71D44EFA55A193ED982857 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -186,6 +198,7 @@
 				884A72C81A302EE00069F62C /* Frameworks */,
 				884A72C91A302EE00069F62C /* Resources */,
 				7642184944BCCC9699C5A2CA /* Copy Pods Resources */,
+				DF45FE2BC4540E25F63EE620 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -293,6 +306,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QuickStart/Pods-QuickStart-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		DF45FE2BC4540E25F63EE620 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QuickStart/Pods-QuickStart-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		E79726024001034C0E97919D /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -363,7 +391,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Abir Majumdar (76A3K77WGT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Abir Majumdar (76A3K77WGT)";
 				COPY_PHASE_STRIP = NO;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -408,7 +436,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Abir Majumdar (76A3K77WGT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Abir Majumdar (76A3K77WGT)";
 				COPY_PHASE_STRIP = YES;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -434,8 +462,9 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = QuickStart/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.layer.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -451,8 +480,9 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = QuickStart/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.layer.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
