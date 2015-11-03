@@ -151,6 +151,15 @@ static UIColor *LSRandomColor(void)
         if (!self.conversation) {
             NSLog(@"New Conversation creation failed: %@", conv_error);
         }
+    } else {
+        
+        NSLog(@"\n\n\nFOUND CONVERSATION, METADATA IS: %@\n\n\n", self.conversation.metadata);
+        
+        
+        NSDictionary *conversationMetadata = @{@"one": @"two"};
+        
+        [self.conversation setValuesForMetadataKeyPathsWithDictionary:conversationMetadata merge:YES];
+        
     }
     
     if (!error) {
